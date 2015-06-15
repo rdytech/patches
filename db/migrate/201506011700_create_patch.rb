@@ -1,7 +1,6 @@
 class CreatePatch < ActiveRecord::Migration
   def change
-    create_table :patches_patch do |t|
-      t.string :name, null: false
+    create_table :patches_patches do |t|
       t.string :path, null: false
       t.timestamps
     end

@@ -1,6 +1,6 @@
 # Patches
 
-Once of data patches.
+A simple gem for one of tasks for example database patches
 
 ## Installation
 

@@ -1,4 +1,6 @@
 class Patches::Pending
+  include Enumerable
+
   attr_accessor :path
 
   def initialize(path=nil)
@@ -6,13 +8,22 @@ class Patches::Pending
   end
 
   def each
-    Dir["#{path}/*.rb"].each do |path|
-      yield path unless already_run?(path)
+    return nil unless files
+
+    files.each do |file|
+      unless already_run?(file)
+        yield file
+      end
     end
   end
 
   private
+
+  def files
+    Dir["#{path}/*.rb"].to_a.sort
+  end
+
   def already_run?(path)
-    Patch.path_lookup.has_key?(path)
+    Patches::Patch.path_lookup.has_key?(path)
   end
 end

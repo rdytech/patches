@@ -1,14 +1,12 @@
 namespace :patches do
   desc "Run Patches"
-  task :run, [:environment] do |t, args|
-    Patches::Runner.new.run
+  task :run => [:environment] do
+    Patches::Runner.new.perform
   end
 
-  task :pending, [:environment] do |t, args|
+  task :pending => [:environment] do
     Patches::Pending.each do |patch|
-c     puts patch
+      puts patch
     end
   end
 end
-
-Rake::Task['db:migrate'].enhance(['patches:run'])
