@@ -1,6 +1,6 @@
 # Patches
 
-Data Patches
+Once of data patches.
 
 ## Installation
 
@@ -20,18 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-mkdir db/patches
-
-```ruby
-class PreferenceUpdate < Patches::Patch
-  def perform
-  end
-end
-```
-
-```bash
-bundle exec rake db:patch
-```
+see `docs/usage.md`
 
 ## Development
 
