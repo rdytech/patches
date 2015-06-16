@@ -3,7 +3,7 @@ class Patches::Runner
 
   class UnknownPatch < StandardError; end
 
-  def initialize(path=nil)
+  def initialize(path: nil)
     @path = path || Patches.default_path
   end
 
@@ -22,7 +22,8 @@ class Patches::Runner
   end
 
   def patch_path(patch_path)
-    Pathname.new(patch_path).relative_path_from(path).to_s
+    File.basename(patch_path)
+    # Pathname.new(patch_path).relative_path_from(path).to_s
   end
 
   def pending

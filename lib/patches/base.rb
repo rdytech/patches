@@ -1,4 +1,10 @@
 class Patches::Base
+
+  # TODO: Use this :/
+  def self.tenant(name)
+    @tenant = name
+  end
+
   def run
     logger.warn("Run method not implemented for #{self.class.name}")
   end

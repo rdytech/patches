@@ -24,6 +24,10 @@ class Patches::Pending
   end
 
   def already_run?(path)
-    Patches::Patch.path_lookup.has_key?(path)
+    patches[File.basename(path)]
+  end
+
+  def patches
+    @patches ||= Patches::Patch.path_lookup
   end
 end

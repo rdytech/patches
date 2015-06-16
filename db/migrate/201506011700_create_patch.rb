@@ -4,5 +4,7 @@ class CreatePatch < ActiveRecord::Migration
       t.string :path, null: false
       t.timestamps
     end
+
+    add_index :patches_patches, unique: true
   end
 end
