@@ -1,3 +1,5 @@
+require 'patches/tenant_runner'
+
 namespace :patches do
   desc "Run Patches"
   task :run => [:environment] do
