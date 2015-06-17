@@ -26,7 +26,7 @@ update the run method and then execute
 
 
 ```bash
-bundle exec rake db:patch
+bundle exec rake patches:run
 ```
 
 Patches will only ever run once, patches will run in order.
