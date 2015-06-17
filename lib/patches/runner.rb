@@ -3,7 +3,7 @@ class Patches::Runner
 
   class UnknownPatch < StandardError; end
 
-  def initialize(path: nil)
+  def initialize(path = nil)
     @path = path || Patches.default_path
   end
 
