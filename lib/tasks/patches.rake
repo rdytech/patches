@@ -3,7 +3,7 @@ require 'patches/tenant_runner'
 namespace :patches do
   desc "Run Patches"
   task :run => [:environment] do
-    if defined?(Apartment)
+    if defined?(Apartment) && tenants.present?
       Patches::TenantRunner.new(tenants: tenants).perform
     else
       Patches::Runner.new.perform

@@ -23,7 +23,6 @@ class Patches::Runner
 
   def patch_path(patch_path)
     File.basename(patch_path)
-    # Pathname.new(patch_path).relative_path_from(path).to_s
   end
 
   def pending
