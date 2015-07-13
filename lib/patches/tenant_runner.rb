@@ -8,10 +8,16 @@ class Patches::TenantRunner
 
   def perform
     Patches.logger.info("Patches tenant runner for: #{tenants.join(',')}")
+
     tenants.each do |tenant|
       Apartment::Tenant.switch(tenant)
-      Patches::Runner.new(path).perform
+      runner = build
+      runner.perform
     end
+  end
+
+  def build
+    Patches::Runner.new(path)
   end
 
   def tenants

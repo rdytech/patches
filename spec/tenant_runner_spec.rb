@@ -10,6 +10,10 @@ require 'patches/tenant_runner'
 describe Patches::TenantRunner do
   let(:runner) { double('Runner') }
 
+  before do
+    allow(Patches).to receive(:default_path).and_return('')
+  end
+
   context 'with tenants' do
     let(:tenants) { ['tenants'] }
     subject { described_class.new(tenants: tenants) }
@@ -24,7 +28,7 @@ describe Patches::TenantRunner do
     specify do
       expect(subject.tenants).to eql(['test'])
       expect(runner).to receive(:perform).and_return(true)
-      expect(subject).to receive(:runner).and_return(runner)
+      expect(subject).to receive(:build).and_return(runner)
       expect(Apartment::Tenant).to receive(:switch).with('test')
       expect(subject.perform).to eql(['test'])
     end
