@@ -9,6 +9,7 @@ class Patches::Pending
 
   def each
     return nil unless files
+    Patches.logger.info("Patches found: #{files.join(',')}")
 
     files.each do |file|
       unless already_run?(file)
@@ -20,7 +21,7 @@ class Patches::Pending
   private
 
   def files
-    Dir["#{path}/*.rb"].to_a.sort
+    @files ||= Dir[File.join(path, "*.rb")].to_a.sort
   end
 
   def already_run?(path)
