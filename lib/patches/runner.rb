@@ -8,13 +8,20 @@ class Patches::Runner
   end
 
   def perform
-    pending.each do |file_path|
+    completed_patches = pending.each do |file_path|
       klass = load_class(file_path)
       instance = klass.new
       Patches.logger.info("Running #{klass} from #{file_path}")
-      instance.run
+      begin
+        instance.run
+      rescue => e
+        Patches::Notifier.notify_failure(file_path, format_exception(e))
+        raise e
+      end
       complete!(patch_path(file_path))
     end
+    Patches::Notifier.notify_success(completed_patches)
+    completed_patches
   end
 
   def complete!(patch_path)
@@ -27,6 +34,10 @@ class Patches::Runner
 
   def pending
     @pending ||= Patches::Pending.new(path)
+  end
+
+  def format_exception(e)
+    "#{e.class.name}: #{e.message} (#{e.backtrace.first})"
   end
 
   private

@@ -9,9 +9,10 @@ class Patches::Pending
 
   def each
     return nil unless files
-    Patches.logger.info("Patches found: #{files.join(',')}")
+    new_files = files.reject { |file| already_run?(file) }
+    Patches.logger.info("Patches found: #{new_files.join(',')}")
 
-    files.each do |file|
+    new_files.each do |file|
       unless already_run?(file)
         yield file
       end
