@@ -1,12 +1,16 @@
-require 'patches/tenant_runner'
-
 namespace :patches do
   desc "Run Patches"
   task :run => [:environment] do
     if defined?(Apartment) && tenants.present?
-      Patches::TenantRunner.new(tenants: tenants).perform
+      runner = Patches::TenantRunner
     else
-      Patches::Runner.new.perform
+      runner = Patches::Runner
+    end
+
+    if defined?(Sidekiq) && Patches::Config.use_sidekiq
+      Patches::Worker.perform_async(runner)
+    else
+      runner.new.perform
     end
   end
 
