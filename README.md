@@ -12,7 +12,6 @@ Add this line to your application's Gemfile:
 ```ruby
 gem 'patches'
 ```
-
 And then execute:
 
     $ bundle
@@ -33,8 +32,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/patches/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
+1. Fork it ( https://github.com/jobready/patches/fork )
+2. Create your feature branch (`git checkout -b feature/my-feature-name`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
+4. Push to the branch (`git push origin feature/my-new-feature`)
 5. Create a new Pull Request
