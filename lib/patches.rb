@@ -24,3 +24,7 @@ require "patches/engine" if defined?(Rails)
 require "patches/patch"
 require "patches/pending"
 require "patches/runner"
+require "patches/tenant_runner"
+require "patches/config"
+require "patches/notifier"
+require "patches/worker" if defined?(Sidekiq)

@@ -20,6 +20,21 @@ Migrate database
 bundle exec rake db:migrate
 ```
 
+If you would like to run the patches asynchronously, or would like them to notify your hipchat room when they fail or succeed, you need to set up an initializer to set those options.
+
+```Ruby
+Patches::Config.configure do |config|
+  config.use_sidekiq = true
+
+  config.use_hipchat = true
+  config.hipchat_options = {
+    api_token: HIPCHATAPITOKEN,
+    room: HIPCHATROOMNAME,
+    user: HIPCHATUSER #maximum of 15 characters
+  }
+end
+```
+
 ## Creating Patches
 
 Generate a patch
@@ -55,4 +70,4 @@ require 'patches/capistrano'
 
 ## Multitenant
 
-Patches will detect if `Apartment` gem is installed and if there are any tenants and run the patches for each tenant 
+Patches will detect if `Apartment` gem is installed and if there are any tenants and run the patches for each tenant
