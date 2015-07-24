@@ -9,8 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["John D'Agostino"]
   spec.email         = ["johnd@jobready.com.au"]
 
+  spec.licenses    = ['MIT']
   spec.summary       = %q{A simple gem for one off tasks}
-  spec.description   = %q{A simple gem for one of tasks for example database patches}
+  spec.description   = %q{A simple gem for one off tasks for example database patches}
   spec.homepage      = "http://github.com/jobready/patches"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
