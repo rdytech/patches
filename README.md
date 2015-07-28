@@ -3,6 +3,9 @@
 [![Code Climate](https://codeclimate.com/repos/557f93b76956807f81000001/badges/39d142050017ffeb2564/gpa.svg)](https://codeclimate.com/repos/557f93b76956807f81000001/feed)
 [![Test Coverage](https://codeclimate.com/repos/557f93b76956807f81000001/badges/39d142050017ffeb2564/coverage.svg)](https://codeclimate.com/repos/557f93b76956807f81000001/coverage)
 
+![patches](docs/patches.jpg)
+
+
 A simple gem for one off tasks
 
 ## Installation
