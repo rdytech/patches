@@ -1,6 +1,6 @@
-namespace :deploy do
+namespace :patches do
   desc 'Runs rake patches:run'
-  task :patches do
+  task :run do
      on primary fetch(:migration_role) do
         within release_path do
            with rails_env: fetch(:rails_env) do
@@ -9,5 +9,4 @@ namespace :deploy do
         end
      end
   end
-  after 'deploy:migrate', 'deploy:patches'
 end

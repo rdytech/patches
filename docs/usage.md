@@ -5,7 +5,7 @@
 Add patches to the project Gemfile
 
 ```ruby
-gem 'patches', '~> 1.0'
+gem 'patches', '~> 2.0.0'
 ```
 
 Install the database migration
@@ -64,11 +64,19 @@ bundle exec rake patches:run
 
 Patches will only ever run once, patches will run in order of creation date.
 
-To run patches after db:migrate on deployment edit Capfile and add
+To run patches on deployment using Capistrano, edit your Capfile and add
 
 ```ruby
 require 'patches/capistrano'
 ```
+
+And then in your deploy.rb
+
+```ruby
+after 'last_task_you_want_to_run' 'patches:run'
+```
+
+If you are using sidekiq and restarting the sidekiq process on the box as a part of the deploy process, please make sure that the patches run task runs after sidekiq restarts, otherwise there is no guarentee the tasks will run.
 
 ## Multitenant
 
