@@ -14,8 +14,8 @@ class Patches::Notifier
     end
 
     def failure_message(patch_path, error)
-      message = "#{environment_prefix}Error applying patch:"\
-        " #{Pathname.new(patch_path).basename} failed with error: #{error}"
+      details = "#{Pathname.new(patch_path).basename} failed with error: #{error}"
+      message = "#{environment_prefix}Error applying patch: #{details}"
       append_tenant_message(message)
     end
 
@@ -31,9 +31,11 @@ class Patches::Notifier
     private
 
     def send_hipchat_message(message, options)
-      if defined?(HipChat) && Patches::Config.use_hipchat
-        HipChat::Client.new(Patches::Config.hipchat_options[:api_token])[Patches::Config.hipchat_options[:room]].send(Patches::Config.hipchat_options[:user], message, options)
-      end
+      return unless defined?(HipChat) && Patches::Config.use_hipchat
+
+      client = HipChat::Client.new(Patches::Config.hipchat_options[:api_token])
+      room   = client[Patches::Config.hipchat_options[:room]]
+      room.send(Patches::Config.hipchat_options[:user], message, options)
     end
   end
 end
