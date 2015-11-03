@@ -9,13 +9,18 @@ class Patches::Notifier
     end
 
     def success_message(patches)
-      message = "#{patches.count} patches succeeded"
+      message = "#{environment_prefix}#{patches.count} patches succeeded"
       append_tenant_message(message)
     end
 
     def failure_message(patch_path, error)
-      message = "Error applying patch: #{Pathname.new(patch_path).basename} failed with error: #{error}"
+      message = "#{environment_prefix}Error applying patch:"\
+        " #{Pathname.new(patch_path).basename} failed with error: #{error}"
       append_tenant_message(message)
+    end
+
+    def environment_prefix
+      "[#{Rails.env.upcase}] " if defined?(Rails)
     end
 
     def append_tenant_message(message)
