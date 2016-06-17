@@ -57,6 +57,12 @@ end
 
 update the run method and then execute
 
+Generate patch with specs
+
+```
+bundle exec rails g patches:patch PreferenceUpdate --specs=true
+```
+
 
 ```bash
 bundle exec rake patches:run
