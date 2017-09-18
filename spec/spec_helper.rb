@@ -20,6 +20,7 @@ require 'active_model'
 require 'active_record'
 require 'patches'
 require 'pry'
+require 'webmock/rspec'
 
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3',
                                         database: 'test.db')
