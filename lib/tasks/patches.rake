@@ -7,7 +7,7 @@ namespace :patches do
       runner = Patches::Runner
     end
 
-    if defined?(Sidekiq) && Patches::Config.use_sidekiq
+    if defined?(Sidekiq) && Patches::Config.configuration.use_sidekiq
       Patches::Worker.perform_async(runner)
     else
       runner.new.perform

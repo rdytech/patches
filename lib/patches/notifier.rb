@@ -28,14 +28,18 @@ class Patches::Notifier
       message
     end
 
+    def send_hipchat_message(message, options)
+      return unless defined?(HipChat) && config.use_hipchat
+
+      client = HipChat::Client.new(config.hipchat_api_token, config.hipchat_init_options)
+      room = client[config.hipchat_room]
+      room.send(config.hipchat_user, message, options)
+    end
+
     private
 
-    def send_hipchat_message(message, options)
-      return unless defined?(HipChat) && Patches::Config.use_hipchat
-
-      client = HipChat::Client.new(Patches::Config.hipchat_options[:api_token])
-      room   = client[Patches::Config.hipchat_options[:room]]
-      room.send(Patches::Config.hipchat_options[:user], message, options)
+    def config
+      Patches::Config.configuration
     end
   end
 end

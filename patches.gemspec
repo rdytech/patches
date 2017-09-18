@@ -34,4 +34,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "codeclimate-test-reporter", "~> 0.4"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "sidekiq", "~> 3.4.1"
+  spec.add_development_dependency "hipchat"
+  spec.add_development_dependency "webmock"
 end

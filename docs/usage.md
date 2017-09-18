@@ -32,7 +32,8 @@ Patches::Config.configure do |config|
   config.hipchat_options = {
     api_token: ENV['HIPCHAT_TOKEN'],
     room: ENV['HIPCHAT_ROOM'],
-    user: ENV['HIPCHAT_USERNAME'] #maximum of 15 characters
+    user: ENV['HIPCHAT_USERNAME'], # maximum of 15 characters
+    api_version: 'v1', # optional
   }
 end
 ```
