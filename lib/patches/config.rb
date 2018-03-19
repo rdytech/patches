@@ -14,7 +14,11 @@ module Patches
       end
 
       class Configuration
+        include FileDownloaderConfigConcern
+
         attr_accessor :use_sidekiq, :sidekiq_queue, :sidekiq_options, :use_hipchat, :hipchat_options
+
+        attr_reader :file_downloader
 
         def initialize
           @sidekiq_queue = 'default'

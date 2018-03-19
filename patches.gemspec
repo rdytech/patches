@@ -20,11 +20,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "railties", ">= 3.2"
+  spec.add_dependency "aws-sdk-s3", "~> 1"
 
   spec.add_development_dependency "bundler", "~> 1.8"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "sqlite3", "~> 1.3.5"
   spec.add_development_dependency "rspec-rails", "~> 3.2.0"
+  spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "capybara", "~> 2.3.0"
   spec.add_development_dependency "generator_spec", "~> 0.9.0"
   spec.add_development_dependency "simplecov", "~> 0.10"
@@ -33,6 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "database_cleaner", "~> 1.3.0"
   spec.add_development_dependency "codeclimate-test-reporter", "~> 0.4"
   spec.add_development_dependency "pry"
+  spec.add_development_dependency "byebug"
   spec.add_development_dependency "sidekiq", "~> 3.4.1"
   spec.add_development_dependency "hipchat"
   spec.add_development_dependency "webmock"

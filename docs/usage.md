@@ -38,6 +38,45 @@ Patches::Config.configure do |config|
 end
 ```
 
+### File Downloading
+
+Patches comes with a built in file downloader. You can use the default one (S3) or inject your own downloader class.
+
+#### S3
+
+```
+Patches::Config.configure do |config|
+  config.file_downloader = {
+    type: :s3,
+    options: {
+      bucket_name: 'my-bucket',
+      aws_config: {
+        access_key_id: 'YOURKEY',
+        secret_access_key: 'YOURSECRET',
+        region: 'region'
+      }
+    }
+  }
+end
+```
+
+#### Custom Downloader
+
+You can set a custom default downloader by passing a proc/lambda.
+The class must implement a ```#download``` method which takes the filename and destionation as arguments. For more details, check the default downloader class ```lib/patches/s3_downloader.rb```.
+
+```
+class MyDownloader
+  def download(filename, destination)
+    # your custom download logic here
+  end
+end
+
+Patches::Config.configure do |config|
+  config.file_downloader = -> { MyDownloader.new }
+end
+```
+
 ## Creating Patches
 
 Generate a patch
@@ -84,6 +123,36 @@ after 'last_task_you_want_to_run' 'patches:run'
 ```
 
 If you are using sidekiq and restarting the sidekiq process on the box as a part of the deploy process, please make sure that the patches run task runs after sidekiq restarts, otherwise there is no guarentee the tasks will run.
+
+## Downloading Files
+
+To download a remote file, simply call ```download_file(filename, destination)```. The file will be downloaded using the configured downloader and stored in the destination. The file path will be returned if the file was successfully downloaded.
+
+```
+class MyPatch < Patches::Base
+  def run
+    filepath = download_file(filename, destination)
+    # do something with the downloaded file
+  end
+end
+```
+
+You can also use a different downloader on the fly by passing it to the download method:
+
+```
+class MyDownloader
+  def download(filename, destination)
+    # your custom download logic here
+  end
+end
+
+class MyPatch < Patches::Base
+  def run
+    filepath = download_file(filename, destination, MyDownloader.new)
+    # do something with the downloaded file
+  end
+end
+```
 
 ## Multitenant
 
