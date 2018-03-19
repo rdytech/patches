@@ -85,6 +85,16 @@ after 'last_task_you_want_to_run' 'patches:run'
 
 If you are using sidekiq and restarting the sidekiq process on the box as a part of the deploy process, please make sure that the patches run task runs after sidekiq restarts, otherwise there is no guarentee the tasks will run.
 
+## File Download
+
+If a patch requires data assets, you could use S3 to store the file.
+If credentials are defined in env vars, as per https://docs.aws.amazon.com/cli/latest/topic/config-vars.html#id1
+
+```
+require 'aws-sdk-s3'
+Aws::S3::Client.new.get_object(bucket: @bucket_name, key: filename, response_target: destination)
+```
+
 ## Multitenant
 
 Patches will detect if `Apartment` gem is installed and if there are any tenants and run the patches for each tenant
