@@ -123,4 +123,61 @@ describe Patches::Config do
       expect(subject).to eq('hipchat_user')
     end
   end
+
+  describe '#file_downloader' do
+    context 'supported' do
+      context 'S3' do
+        context 'with options' do
+          let(:options) do
+            {
+              bucket_name: 'bucket',
+              region: 'region'
+            }
+          end
+
+          before do
+            expect(Patches::FileDownloaders::S3Downloader).to receive(:new).with(
+              bucket_name: 'bucket',
+              region: 'region'
+            ).and_call_original
+            patches_config.file_downloader = { type: :s3, options: options }
+          end
+
+          it 'initializes S3 Downloader' do
+            expect(patches_config.file_downloader).to be_a Patches::FileDownloaders::S3Downloader
+          end
+        end
+
+        context 'without options' do
+          let(:options) { nil }
+
+          it 'raises ArgumentError' do
+            expect { patches_config.file_downloader = { type: :s3, options: options } }.to raise_error(ArgumentError)
+          end
+        end
+      end
+    end
+
+    context 'not supported' do
+      it 'raises an error' do
+        expect { patches_config.file_downloader = { type: :google } }.to raise_error(ArgumentError)
+      end
+    end
+
+    context 'type not present' do
+      it 'raises an error' do
+        expect { patches_config.file_downloader = {} }.to raise_error(ArgumentError)
+      end
+    end
+
+    context 'custom downloader' do
+      let(:downloader) { double(:downloader) }
+
+      before { patches_config.file_downloader = -> { downloader } }
+
+      it 'sets the downloader' do
+        expect(patches_config.file_downloader).to be_a Proc
+      end
+    end
+  end
 end
