@@ -55,6 +55,15 @@ describe Patches::Config do
     end
   end
 
+  describe '#sidekiq_parallel' do
+    subject { patches_config.sidekiq_parallel }
+    before { patches_config.sidekiq_parallel = true }
+
+    it 'is the configured value' do
+      expect(subject).to eq(true)
+    end
+  end
+
   describe '#use_hipchat' do
     subject { patches_config.use_hipchat }
     before { patches_config.use_hipchat = true }

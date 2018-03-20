@@ -10,3 +10,4 @@
 /coverage/
 /test.db
 /*.gem
+.byebug_history
