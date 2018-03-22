@@ -11,10 +11,19 @@ describe Patches::Config do
 
   describe '#use_sidekiq' do
     subject { patches_config.use_sidekiq }
-    before { patches_config.use_sidekiq = true }
 
-    it 'is the configured value' do
-      expect(subject).to eq(true)
+    context 'when set' do
+      before { patches_config.use_sidekiq = true }
+
+      it 'is the configured value' do
+        expect(subject).to be_truthy
+      end
+    end
+
+    context 'when not configured' do
+      it 'returns a falsey value' do
+        expect(subject).to be_falsey
+      end
     end
   end
 
