@@ -5,7 +5,7 @@
 Add patches to the project Gemfile
 
 ```ruby
-gem 'patches', '~> 2.0.0'
+gem 'patches', '~> 2.3.0'
 ```
 
 Install the database migration
