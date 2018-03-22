@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'sidekiq/testing'
 
 module Apartment
   module Tenant
@@ -6,11 +7,13 @@ module Apartment
 end
 
 require 'patches/tenant_runner'
+require "patches/tenant_worker"
 
 describe Patches::TenantRunner do
   let(:runner) { double('Runner') }
 
   before do
+    Sidekiq::Testing.fake!
     allow(Patches).to receive(:default_path).and_return('')
   end
 
@@ -21,16 +24,35 @@ describe Patches::TenantRunner do
   end
 
   context 'perform' do
-    before do
-      expect(Apartment).to receive(:tenant_names).and_return(['test'])
-    end
+    let(:tenant_names) { ['test'] }
+
+    before { expect(Apartment).to receive(:tenant_names).and_return(tenant_names) }
 
     specify do
       expect(subject.tenants).to eql(['test'])
-      expect(runner).to receive(:perform).and_return(true)
-      expect(subject).to receive(:build).and_return(runner)
-      expect(Apartment::Tenant).to receive(:switch).with('test')
-      expect(subject.perform).to eql(['test'])
+      expect(subject).to receive(:run).with('test', nil)
+      expect { subject.perform }.not_to change(Patches::TenantWorker.jobs, :size)
+    end
+
+    context 'parallel' do
+      before { Patches::Config.configuration.sidekiq_parallel = true }
+
+      specify do
+        expect(subject.tenants).to eql(['test'])
+        expect(Patches::TenantWorker).to receive(:perform_async).with('test', nil).and_call_original
+        expect { subject.perform }.to change(Patches::TenantWorker.jobs, :size).by(1)
+      end
+
+      context 'for multiple tenants' do
+        let(:tenant_names) { ['test', 'test2'] }
+
+        specify do
+          expect(subject.tenants).to eql(['test', 'test2'])
+          expect(Patches::TenantWorker).to receive(:perform_async).with('test', nil).and_call_original
+          expect(Patches::TenantWorker).to receive(:perform_async).with('test2', nil).and_call_original
+          expect { subject.perform }.to change(Patches::TenantWorker.jobs, :size).by(2)
+        end
+      end
     end
   end
 end

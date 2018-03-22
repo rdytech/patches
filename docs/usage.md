@@ -38,6 +38,19 @@ Patches::Config.configure do |config|
 end
 ```
 
+### Running patches in parallel for tenants
+
+If you are using the Apartment gem, you can run the patches for each tenant in parallel. Just set the config ```sidekiq_parallel``` to ```true``` and you're good to go.
+
+```
+Patches::Config.configure do |config|
+  config.use_sidekiq = true
+  config.sidekiq_parallel = true
+end
+```
+
+*Note:* Make sure your sidekiq queue is able to process concurrent jobs. You can use ```config.sidekiq_options``` to customise it.
+
 ## Creating Patches
 
 Generate a patch
