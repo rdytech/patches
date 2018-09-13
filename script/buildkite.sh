@@ -2,7 +2,8 @@
 set -e
 
 echo '--- setting ruby version'
-rbenv local 2.1.5
+rbenv install 2.3.7 -s
+rbenv local 2.3.7
 
 echo '--- setting up env'
 REVISION=https://github.com/$BUILDBOX_PROJECT_SLUG/commit/$BUILDBOX_COMMIT
