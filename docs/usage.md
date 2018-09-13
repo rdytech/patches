@@ -5,7 +5,7 @@
 Add patches to the project Gemfile
 
 ```ruby
-gem 'patches', '~> 2.3.0'
+gem 'patches', '~> 2.4.0'
 ```
 
 Install the database migration
@@ -22,7 +22,9 @@ bundle exec rake db:migrate
 
 ## Configuration
 
-If you would like to run the patches asynchronously, or would like them to notify your hipchat room when they fail or succeed, you need to set up an initializer to set those options.
+If you would like to run the patches asynchronously, or would like them to notify
+your hipchat room or Slack channel when they fail or succeed, you need to set up
+an initializer to set those options.
 
 ```Ruby
 Patches::Config.configure do |config|
@@ -35,12 +37,20 @@ Patches::Config.configure do |config|
     user: ENV['HIPCHAT_USERNAME'], # maximum of 15 characters
     api_version: 'v1', # optional
   }
+
+  config.use_slack = true
+  config.slack_options = {
+    webhook_url: ENV['SLACK_WEBHOOK_URL'],
+    channel: ENV['SLACK_CHANNEL'],
+    username: ENV['SLACK_USER']
+  }
 end
 ```
 
 ### Running patches in parallel for tenants
 
-If you are using the Apartment gem, you can run the patches for each tenant in parallel. Just set the config ```sidekiq_parallel``` to ```true``` and you're good to go.
+If you are using the Apartment gem, you can run the patches for each tenant in parallel.
+Just set the config ```sidekiq_parallel``` to ```true``` and you're good to go.
 
 ```
 Patches::Config.configure do |config|
@@ -49,7 +59,8 @@ Patches::Config.configure do |config|
 end
 ```
 
-*Note:* Make sure your sidekiq queue is able to process concurrent jobs. You can use ```config.sidekiq_options``` to customise it.
+*Note:* Make sure your sidekiq queue is able to process concurrent jobs.
+You can use ```config.sidekiq_options``` to customise it.
 
 ## Creating Patches
 
@@ -96,7 +107,9 @@ And then in your deploy.rb
 after 'last_task_you_want_to_run' 'patches:run'
 ```
 
-If you are using sidekiq and restarting the sidekiq process on the box as a part of the deploy process, please make sure that the patches run task runs after sidekiq restarts, otherwise there is no guarentee the tasks will run.
+If you are using sidekiq and restarting the sidekiq process on the box
+as a part of the deploy process, please make sure that the patches run task runs
+after sidekiq restarts, otherwise there is no guarentee the tasks will run.
 
 ## File Download
 
@@ -110,4 +123,5 @@ Aws::S3::Client.new.get_object(bucket: @bucket_name, key: filename, response_tar
 
 ## Multitenant
 
-Patches will detect if `Apartment` gem is installed and if there are any tenants and run the patches for each tenant
+Patches will detect if `Apartment` gem is installed and if there are any tenants
+and run the patches for each tenant

@@ -5,9 +5,9 @@ require 'simplecov'
 CodeClimate::TestReporter.start
 SimpleCov.start
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-  SimpleCov::Formatter::HTMLFormatter,
-]
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+  SimpleCov::Formatter::HTMLFormatter
+])
 
 SimpleCov.configure do
   add_filter '/spec/'
