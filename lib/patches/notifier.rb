@@ -1,11 +1,15 @@
+require 'slack-notifier'
+
 class Patches::Notifier
   class << self
     def notify_success(patches)
       send_hipchat_message(success_message(patches), color: 'green')
+      send_slack_message(success_message(patches), 'good')
     end
 
     def notify_failure(patch_path, error)
       send_hipchat_message(failure_message(patch_path, error), color: 'red')
+      send_slack_message(failure_message(patch_path, error), 'danger')
     end
 
     def success_message(patches)
@@ -34,6 +38,19 @@ class Patches::Notifier
       client = HipChat::Client.new(config.hipchat_api_token, config.hipchat_init_options)
       room = client[config.hipchat_room]
       room.send(config.hipchat_user, message, options)
+    end
+
+    def send_slack_message(message, color)
+      return unless defined?(Slack) && config.use_slack
+
+      notifier = Slack::Notifier.new(
+        config.slack_webhook_url,
+        channel: config.slack_channel,
+        username: config.slack_username)
+
+      payload = { attachments: [{ color: color, text: message }] }
+
+      notifier.post payload
     end
 
     private

@@ -141,4 +141,40 @@ describe Patches::Config do
       expect(subject).to eq('hipchat_user')
     end
   end
+
+  describe '#use_slack' do
+    subject { patches_config.use_slack }
+    before { patches_config.use_slack = true }
+
+    it 'is the configured value' do
+      expect(subject).to eq(true)
+    end
+  end
+
+  describe '#slack_webhook_url' do
+    subject { patches_config.slack_webhook_url }
+    before { patches_config.slack_options = { webhook_url: 'url' } }
+
+    it 'is webhook_url option from slack_options' do
+      expect(subject).to eq('url')
+    end
+  end
+
+  describe '#slack_channel' do
+    subject { patches_config.slack_channel }
+    before { patches_config.slack_options = { channel: 'channel-name' } }
+
+    it 'is channel option from slack_options' do
+      expect(subject).to eq('channel-name')
+    end
+  end
+
+  describe '#slack_username' do
+    subject { patches_config.slack_username }
+    before { patches_config.slack_options = { username: 'slack-bot' } }
+
+    it 'is username option from slack_options' do
+      expect(subject).to eq('slack-bot')
+    end
+  end
 end

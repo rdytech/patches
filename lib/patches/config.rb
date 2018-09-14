@@ -14,7 +14,8 @@ module Patches
       end
 
       class Configuration
-        attr_accessor :use_sidekiq, :sidekiq_queue, :sidekiq_options, :use_hipchat, :hipchat_options, :sidekiq_parallel
+        attr_accessor :use_sidekiq, :sidekiq_queue, :sidekiq_options, :use_hipchat,
+          :hipchat_options, :sidekiq_parallel, :use_slack, :slack_options
 
         def initialize
           @sidekiq_queue = 'default'
@@ -38,6 +39,18 @@ module Patches
 
         def hipchat_user
           hipchat_options[:user]
+        end
+
+        def slack_channel
+          slack_options[:channel]
+        end
+
+        def slack_username
+          slack_options[:username]
+        end
+
+        def slack_webhook_url
+          slack_options[:webhook_url]
         end
       end
     end
