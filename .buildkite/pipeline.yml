@@ -17,7 +17,7 @@ steps:
         prefix: /app
         artifact: "coverage/.resultset*.json"
         input_type: simplecov
-        parts: 2
+        parts: 1
     env:
       CC_TEST_REPORTER_ID:
     agents:
