@@ -6,8 +6,8 @@ require 'patches/version'
 Gem::Specification.new do |spec|
   spec.name          = "patches"
   spec.version       = Patches::VERSION
-  spec.authors       = ["John D'Agostino"]
-  spec.email         = ["johnd@jobready.com.au"]
+  spec.authors       = ["JobReady"]
+  spec.email         = ["rubygems@jobready.com.au"]
 
   spec.licenses    = ['MIT']
   spec.summary       = %q{A simple gem for one off tasks}
@@ -32,7 +32,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "factory_girl", "~> 4.5.0"
   spec.add_development_dependency "timecop", "~> 0.7.0"
   spec.add_development_dependency "database_cleaner", "~> 1.3.0"
-  spec.add_development_dependency "codeclimate-test-reporter", "~> 0.4"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "sidekiq", "~> 3.4.1"
   spec.add_development_dependency "hipchat"

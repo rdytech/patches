@@ -1,0 +1,24 @@
+steps:
+  - label: ':hammer: Tests'
+    plugins:
+      docker-compose:
+        run: app
+    command: 'bundle exec rspec'
+    agents:
+      queue: docker-heavy
+    artifact_paths: 'coverage/.resultset.json'
+
+  - wait
+
+  - command: "Report CodeClimate Coverage"
+    label: ":codeclimate: Report coverage"
+    plugins:
+      jobready/codeclimate-test-reporter#v2.0:
+        prefix: /app
+        artifact: "coverage/.resultset*.json"
+        input_type: simplecov
+        parts: 1
+    env:
+      CC_TEST_REPORTER_ID:
+    agents:
+      queue: docker-heavy

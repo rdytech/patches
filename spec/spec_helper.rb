@@ -1,16 +1,12 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require "codeclimate-test-reporter"
-require 'simplecov'
 
-CodeClimate::TestReporter.start
-SimpleCov.start
-
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-  SimpleCov::Formatter::HTMLFormatter
-])
-
-SimpleCov.configure do
-  add_filter '/spec/'
+RSpec.configure do |config|
+  if config.files_to_run.one?
+    config.default_formatter = 'doc'
+  else
+    require 'simplecov'
+    SimpleCov.start
+  end
 end
 
 require 'bundler/setup'
@@ -35,4 +31,3 @@ RSpec.configure do |config|
   config.filter_run_excluding perf: true
   config.order = 'random'
 end
-
