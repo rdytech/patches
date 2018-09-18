@@ -1,0 +1,11 @@
+version: '3.2'
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+      - app-gems:/usr/local/bundle
+
+volumes:
+  app-gems:
+    driver: local

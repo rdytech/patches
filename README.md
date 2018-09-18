@@ -1,7 +1,8 @@
 # Patches
 [![Build status](https://badge.buildkite.com/4f3df3f3458bcc933dc44cab6c136af5c3bbdd9f761f1a99ff.svg)](https://buildkite.com/jobready/patches)
-[![Code Climate](https://codeclimate.com/repos/557f93b76956807f81000001/badges/39d142050017ffeb2564/gpa.svg)](https://codeclimate.com/repos/557f93b76956807f81000001/feed)
-[![Test Coverage](https://codeclimate.com/repos/557f93b76956807f81000001/badges/39d142050017ffeb2564/coverage.svg)](https://codeclimate.com/repos/557f93b76956807f81000001/coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/39d142050017ffeb2564/maintainability)](https://codeclimate.com/repos/557f93b76956807f81000001/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/39d142050017ffeb2564/test_coverage)](https://codeclimate.com/repos/557f93b76956807f81000001/test_coverage)
+[![Gem Version](https://badge.fury.io/rb/patches.svg)](https://badge.fury.io/rb/patches)
 
 ![patches](docs/patches.jpg)
 
@@ -35,9 +36,12 @@ see `docs/usage.md`
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
+```
+docker-compose build
+docker-compose run app bundle exec rspec
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release` to create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org/gems/patches).
 
 ## Contributing
 
