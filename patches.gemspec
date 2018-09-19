@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "patches"
   spec.version       = Patches::VERSION
   spec.authors       = ["JobReady"]
-  spec.email         = ["rubygems@jobready.com.au"]
+  spec.email         = ["ruby_gems@jobready.com.au"]
 
   spec.licenses    = ['MIT']
   spec.summary       = %q{A simple gem for one off tasks}
