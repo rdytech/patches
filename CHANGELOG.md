@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.0.1] - 2018-11-19
+### Added
+- Set icon_emoji of posted slack message to :dog:
+
 ## [3.0.0] - 2018-11-19
 ### Removed
 - Hipchat is no longer supported
