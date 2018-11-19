@@ -14,8 +14,8 @@ module Patches
       end
 
       class Configuration
-        attr_accessor :use_sidekiq, :sidekiq_queue, :sidekiq_options, :use_hipchat,
-          :hipchat_options, :sidekiq_parallel, :use_slack, :slack_options
+        attr_accessor :use_sidekiq, :sidekiq_queue, :sidekiq_options,
+          :sidekiq_parallel, :use_slack, :slack_options
 
         def initialize
           @sidekiq_queue = 'default'
@@ -23,22 +23,6 @@ module Patches
 
         def sidekiq_options
           @sidekiq_options ||= { retry: false, queue: sidekiq_queue }
-        end
-
-        def hipchat_api_token
-          hipchat_options[:api_token]
-        end
-
-        def hipchat_init_options
-          hipchat_options.except(:api_token, :room, :user)
-        end
-
-        def hipchat_room
-          hipchat_options[:room]
-        end
-
-        def hipchat_user
-          hipchat_options[:user]
         end
 
         def slack_channel

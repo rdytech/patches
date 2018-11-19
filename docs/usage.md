@@ -23,20 +23,12 @@ bundle exec rake db:migrate
 ## Configuration
 
 If you would like to run the patches asynchronously, or would like them to notify
-your hipchat room or Slack channel when they fail or succeed, you need to set up
+your Slack channel when they fail or succeed, you need to set up
 an initializer to set those options.
 
 ```Ruby
 Patches::Config.configure do |config|
   config.use_sidekiq = true
-
-  config.use_hipchat = true
-  config.hipchat_options = {
-    api_token: ENV['HIPCHAT_TOKEN'],
-    room: ENV['HIPCHAT_ROOM'],
-    user: ENV['HIPCHAT_USERNAME'], # maximum of 15 characters
-    api_version: 'v1', # optional
-  }
 
   config.use_slack = true
   config.slack_options = {
