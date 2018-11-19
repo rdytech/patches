@@ -38,7 +38,7 @@ class Patches::Notifier
         channel: config.slack_channel,
         username: config.slack_username)
 
-      payload = { attachments: [{ color: color, text: message }] }
+      payload = { icon_emoji: ":dog:", attachments: [{ color: color, text: message }] }
 
       notifier.post payload
     end

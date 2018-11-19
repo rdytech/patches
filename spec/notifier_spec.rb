@@ -29,7 +29,7 @@ describe Patches::Notifier do
           .and_call_original
 
         expect_any_instance_of(Slack::Notifier).to receive(:post)
-          .with({ attachments: [{ text: 'This is a message', color: 'good' }] })
+          .with({ icon_emoji: ":dog:", attachments: [{ text: 'This is a message', color: 'good' }] })
 
         subject
       end
