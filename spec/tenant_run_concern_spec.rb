@@ -19,7 +19,7 @@ describe Patches::TenantRunConcern do
 
   describe '#run' do
     it 'calls instance perform' do
-      expect(Apartment::Tenant).to receive(:switch).with('test')
+      expect(Apartment::Tenant).to receive(:switch!).with('test')
       expect(Patches::Runner).to receive(:new).with('path').and_return(runner)
       expect(runner).to receive(:perform)
       subject.run('test', 'path')
