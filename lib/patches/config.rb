@@ -14,8 +14,15 @@ module Patches
       end
 
       class Configuration
-        attr_accessor :use_sidekiq, :sidekiq_queue, :sidekiq_options,
-          :sidekiq_parallel, :use_slack, :slack_options
+        attr_accessor \
+          :application_version,
+          :retry_after_version_mismatch_in,
+          :sidekiq_options,
+          :sidekiq_parallel,
+          :sidekiq_queue,
+          :slack_options,
+          :use_sidekiq,
+          :use_slack
 
         def initialize
           @sidekiq_queue = 'default'
@@ -23,6 +30,10 @@ module Patches
 
         def sidekiq_options
           @sidekiq_options ||= { retry: false, queue: sidekiq_queue }
+        end
+
+        def retry_after_version_mismatch_in
+          @retry_after_version_mismatch_in ||= 1.minute
         end
 
         def slack_channel
