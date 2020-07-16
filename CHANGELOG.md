@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Added `Patches::Worker` extra parameters to support forward compatibility with the upcoming releases
 
-## [3.1.0] - 2018-11-19
+## [3.1.0] - 2019-11-25
+### Fixed
+- Gem compatibility with Apartment 2
+
+## [3.0.1] - 2018-11-19
 ### Added
 - Set icon_emoji of posted slack message to :dog:
 
