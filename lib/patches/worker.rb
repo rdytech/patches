@@ -5,7 +5,7 @@ class Patches::Worker
 
   sidekiq_options Patches::Config.configuration.sidekiq_options
 
-  def perform(runner)
+  def perform(runner, params = {})
     runner.constantize.new.perform
   end
 end

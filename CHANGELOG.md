@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [3.2.0] - 2020-07-16
+### Added
+- Added `Patches::Worker` extra parameters to support forward compatibility with the upcoming releases
+
+## [3.1.0] - 2019-11-25
+### Fixed
+- Gem compatibility with Apartment 2
 
 ## [3.0.1] - 2018-11-19
 ### Added
