@@ -62,8 +62,12 @@ To prevent this case, set the application version in the config:
 
 ```ruby
 Patches::Config.configure do |config|
-  config.application_version = File.read(Rails.root.join('REVISION'))
-  config.retry_after_version_mismatch_in = 1.minute
+  revision_file_path = Rails.root.join('REVISION')
+
+  if File.exist?(revision_file_path)
+    config.application_version = File.read(revision_file_path)
+    config.retry_after_version_mismatch_in = 1.minute
+  end
 end
 ```
 
