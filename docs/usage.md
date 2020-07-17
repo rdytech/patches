@@ -26,7 +26,7 @@ If you would like to run the patches asynchronously, or would like them to notif
 your Slack channel when they fail or succeed, you need to set up
 an initializer to set those options.
 
-```Ruby
+```ruby
 Patches::Config.configure do |config|
   config.use_sidekiq = true
 
@@ -44,7 +44,7 @@ end
 If you are using the Apartment gem, you can run the patches for each tenant in parallel.
 Just set the config ```sidekiq_parallel``` to ```true``` and you're good to go.
 
-```
+```ruby
 Patches::Config.configure do |config|
   config.use_sidekiq = true
   config.sidekiq_parallel = true
@@ -53,6 +53,19 @@ end
 
 *Note:* Make sure your sidekiq queue is able to process concurrent jobs.
 You can use ```config.sidekiq_options``` to customise it.
+
+### Application version verification
+
+In environments where a rolling update of sidekiq workers is performed during the deployment, multiple versions of the application run at the same time. If a Patches job is scheduled by the new application version during the rolling update, there is a possibility that it can be executed by the old application version, which will not have all the required patch files.
+
+To prevent this case, set the application version in the config:
+
+```ruby
+Patches::Config.configure do |config|
+  config.application_version = File.read(Rails.root.join('REVISION'))
+  config.retry_after_version_mismatch_in = 1.minute
+end
+```
 
 ## Creating Patches
 
@@ -76,7 +89,7 @@ update the run method and then execute
 
 Generate patch with specs
 
-```
+```bash
 bundle exec rails g patches:patch PreferenceUpdate --specs=true
 ```
 
@@ -108,7 +121,7 @@ after sidekiq restarts, otherwise there is no guarentee the tasks will run.
 If a patch requires data assets, you could use S3 to store the file.
 If credentials are defined in env vars, as per https://docs.aws.amazon.com/cli/latest/topic/config-vars.html#id1
 
-```
+```ruby
 require 'aws-sdk-s3'
 Aws::S3::Client.new.get_object(bucket: @bucket_name, key: filename, response_target: destination)
 ```
