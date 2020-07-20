@@ -16,8 +16,8 @@ class Patches::Worker
   private
 
   def valid_application_version?(params)
-    return true unless params[:application_version]
+    return true unless params['application_version']
     return true unless Patches::Config.configuration.application_version
-    Patches::Config.configuration.application_version == params[:application_version]
+    Patches::Config.configuration.application_version == params['application_version']
   end
 end

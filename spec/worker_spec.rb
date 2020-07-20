@@ -16,19 +16,19 @@ describe Patches::Worker do
       context 'when application version matches' do
         it 'runs patches' do
           expect(runner).to receive(:perform)
-          subject.perform('Patches::Runner', application_version: application_version)
+          subject.perform('Patches::Runner', 'application_version' => application_version)
         end
       end
 
       context 'when application_version does not match' do
         it 'does not run patches' do
           expect(runner).not_to receive(:perform)
-          subject.perform('Patches::Runner', application_version: 'd8f190c')
+          subject.perform('Patches::Runner', 'application_version' => 'd8f190c')
         end
 
         it 'reschedules the job' do
-          expect(Patches::Worker).to receive(:perform_in).with(1.minute, 'Patches::Runner', application_version: 'd8f190c')
-          subject.perform('Patches::Runner', application_version: 'd8f190c')
+          expect(Patches::Worker).to receive(:perform_in).with(1.minute, 'Patches::Runner', 'application_version' => 'd8f190c')
+          subject.perform('Patches::Runner', 'application_version' => 'd8f190c')
         end
       end
     end
@@ -38,7 +38,7 @@ describe Patches::Worker do
 
       it 'runs patches' do
         expect(runner).to receive(:perform)
-        subject.perform('Patches::Runner', application_version: 'd8f190c')
+        subject.perform('Patches::Runner', 'application_version' => 'd8f190c')
       end
     end
   end
