@@ -8,7 +8,10 @@ namespace :patches do
     end
 
     if defined?(Sidekiq) && Patches::Config.configuration.use_sidekiq
-      Patches::Worker.perform_async(runner)
+      Patches::Worker.perform_async(
+        runner,
+        application_version: Patches::Config.configuration.application_version
+      )
     else
       runner.new.perform
     end
