@@ -11,10 +11,12 @@ require "patches/tenant_worker"
 
 describe Patches::TenantRunner do
   let(:runner) { double('Runner') }
+  let(:application_version) { 'd8f190c' }
 
   before do
     Sidekiq::Testing.fake!
     allow(Patches).to receive(:default_path).and_return('')
+    allow(Patches::Config.configuration).to receive(:application_version) { application_version }
   end
 
   context 'with tenants' do
@@ -39,7 +41,7 @@ describe Patches::TenantRunner do
 
       specify do
         expect(subject.tenants).to eql(['test'])
-        expect(Patches::TenantWorker).to receive(:perform_async).with('test', nil).and_call_original
+        expect(Patches::TenantWorker).to receive(:perform_async).with('test', nil, application_version: application_version).and_call_original
         expect { subject.perform }.to change(Patches::TenantWorker.jobs, :size).by(1)
       end
 
@@ -48,8 +50,8 @@ describe Patches::TenantRunner do
 
         specify do
           expect(subject.tenants).to eql(['test', 'test2'])
-          expect(Patches::TenantWorker).to receive(:perform_async).with('test', nil).and_call_original
-          expect(Patches::TenantWorker).to receive(:perform_async).with('test2', nil).and_call_original
+          expect(Patches::TenantWorker).to receive(:perform_async).with('test', nil, application_version: application_version).and_call_original
+          expect(Patches::TenantWorker).to receive(:perform_async).with('test2', nil, application_version: application_version).and_call_original
           expect { subject.perform }.to change(Patches::TenantWorker.jobs, :size).by(2)
         end
       end

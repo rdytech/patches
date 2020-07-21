@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.5.0] - 2020-07-21
+### Added
+- Enable application version constraint support on `Patches::TenantWorker`
+
 ## [3.4.0] - 2020-07-21
 ### Added
 - `Patches::TenantWorker` application version constraint forward compatibility
