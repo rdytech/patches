@@ -11,7 +11,11 @@ class Patches::TenantRunner
     Patches.logger.info("Patches tenant runner for: #{tenants.join(',')}")
     tenants.each do |tenant|
       if parallel?
-        Patches::TenantWorker.perform_async(tenant, path)
+        Patches::TenantWorker.perform_async(
+          tenant,
+          path,
+          application_version: Patches::Config.configuration.application_version
+        )
       else
         run(tenant, path)
       end
