@@ -22,6 +22,7 @@ end
 require "patches/base"
 require "patches/config"
 require "patches/tenant_run_concern"
+require "patches/application_version_validation"
 require "patches/tenant_worker" if defined?(Sidekiq)
 require "patches/engine" if defined?(Rails)
 require "patches/patch"
