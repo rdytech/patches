@@ -11,7 +11,7 @@ A simple gem for one off tasks
 
 ## Version 2.0
 
-Please note the breaking change release around deployment. See docs/usage.md for the full change.
+Please note the breaking change release around deployment. See [docs/usage.md](docs/usage.md) for the full change.
 
 TL;DR You need to manually declare the patches task to run in your deploy.rb
 
@@ -32,7 +32,7 @@ Or install it yourself as:
 
 ## Usage
 
-see [docs/usage.md]
+see [docs/usage.md](docs/usage.md)
 
 ## Development
 
