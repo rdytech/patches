@@ -32,7 +32,7 @@ Or install it yourself as:
 
 ## Usage
 
-see `docs/usage.md`
+see [docs/usage.md]
 
 ## Development
 
