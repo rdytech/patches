@@ -22,7 +22,7 @@ namespace :patches do
   end
 
   task :pending => [:environment] do
-    Patches::Pending.each do |patch|
+    Patches::Pending.new.each do |patch|
       puts patch
     end
   end
