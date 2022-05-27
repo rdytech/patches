@@ -14,6 +14,7 @@ describe Patches::TenantRunner do
   let(:application_version) { 'd8f190c' }
 
   before do
+    Patches::Config.configuration = nil
     Sidekiq::Testing.fake!
     allow(Patches).to receive(:default_path).and_return('')
     allow(Patches::Config.configuration).to receive(:application_version) { application_version }
