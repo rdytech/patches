@@ -11,23 +11,32 @@ class Patches::Notifier
     end
 
     def success_message(patches)
-      message = "#{environment_prefix}#{patches.count} patches succeeded"
-      append_tenant_message(message)
+      message(patches.count, "patches succeeded")
     end
 
     def failure_message(patch_path, error)
-      details = "#{Pathname.new(patch_path).basename} failed with error: #{error}"
-      message = "#{environment_prefix}Error applying patch: #{details}"
-      append_tenant_message(message)
+      message("Error applying patch:", Pathname.new(patch_path).basename, "failed with error:", error)
+    end
+
+    def message(*args)
+      [notification_prefix, *args, notification_suffix].compact.join(" ")
+    end
+
+    def notification_prefix
+      prefix = config.notification_prefix.presence || environment_prefix
+      "[#{prefix}]" if prefix.present?
     end
 
     def environment_prefix
-      "[#{Rails.env.upcase}] " if defined?(Rails)
+      Rails.env.upcase if defined?(Rails)
     end
 
-    def append_tenant_message(message)
-      message = message + " for tenant: #{Apartment::Tenant.current}" if defined?(Apartment)
-      message
+    def notification_suffix
+      config.notification_suffix.presence || tenant_suffix
+    end
+
+    def tenant_suffix
+      "for tenant: #{Apartment::Tenant.current}" if defined?(Apartment)
     end
 
     def send_slack_message(message, color)

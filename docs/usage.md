@@ -39,6 +39,15 @@ Patches::Config.configure do |config|
 end
 ```
 
+Additionally, you can override the default prefix and suffix of the
+notification message in the patches config:
+
+```ruby
+  # for example
+  config.notification_prefix = "#{Tenant.current.name}-#{Rails.env}"  # => [READYTECH-STAGING]
+  config.notification_suffix = Tenant.current.name  # => ... patches succeeded for Readytech
+```
+
 ### Running patches in parallel for tenants
 
 If you are using the Apartment gem, you can run the patches for each tenant in parallel.

@@ -16,6 +16,8 @@ module Patches
       class Configuration
         attr_accessor \
           :application_version,
+          :notification_prefix,
+          :notification_suffix,
           :retry_after_version_mismatch_in,
           :sidekiq_options,
           :sidekiq_parallel,
