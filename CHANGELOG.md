@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.6.0] - 2022-05-27
+### Added
+- Added `notification_prefix` and `notification_suffix` to configuration options
+- Linked to docs/usage.md in README
+
+### Changed
+- Refactored `Patches::Notifier`
+- `Patches::Notifier.append_tenant_message` effectively replaced by `tenant_suffix`
+
 ## [3.5.0] - 2020-07-22
 ### Added
 - Enable application version constraint support on `Patches::TenantWorker`

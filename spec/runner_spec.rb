@@ -18,7 +18,7 @@ describe Patches::Runner do
         expect(Patches::Notifier).to receive(:notify_failure)
         expect {
           Patches::Runner.new.perform
-        }.to raise_error
+        }.to raise_error(RuntimeError)
       end
     end
 
