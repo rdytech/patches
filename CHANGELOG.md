@@ -6,7 +6,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.6.2] - 2022-08-10
+
+Fixes incorrect release - tag and published gem back in sync
+
+## [3.6.1] - 2022-08-10
+### Added
+- Github actions to publish to Rubygems upon release
+
+### Fixed
+- Fix `patches:pending` rake task
+
 ## [3.6.0] - 2022-05-27
+
+3.6.1 changes were incorrectly published as 3.6.0 but tagged as 3.6.1
+
 ### Added
 - Added `notification_prefix` and `notification_suffix` to configuration options
 - Linked to docs/usage.md in README
