@@ -31,3 +31,4 @@ require "patches/runner"
 require "patches/tenant_runner"
 require "patches/notifier"
 require "patches/worker" if defined?(Sidekiq)
+require "patches/tenant_finder"
