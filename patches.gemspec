@@ -6,13 +6,13 @@ require 'patches/version'
 Gem::Specification.new do |spec|
   spec.name          = "patches"
   spec.version       = Patches::VERSION
-  spec.authors       = ["JobReady"]
-  spec.email         = ["ruby_gems@jobready.com.au"]
+  spec.authors       = ["ReadyTech"]
+  spec.email         = ["ruby_gems@readytech.io"]
 
   spec.licenses    = ['MIT']
   spec.summary       = %q{A simple gem for one off tasks}
   spec.description   = %q{A simple gem for one off tasks for example database patches}
-  spec.homepage      = "http://github.com/jobready/patches"
+  spec.homepage      = "https://github.com/rdytech/patches"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
