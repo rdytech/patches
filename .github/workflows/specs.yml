@@ -1,5 +1,11 @@
 name: Run specs
-on: [push, pull_request]
+on:
+  pull_request:
+    branches:
+      - develop
+  push:
+    branches:
+      - develop
 
 jobs:
   build:
