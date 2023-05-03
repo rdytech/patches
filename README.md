@@ -1,5 +1,5 @@
 # Patches
-[![Build status](https://badge.buildkite.com/4f3df3f3458bcc933dc44cab6c136af5c3bbdd9f761f1a99ff.svg)](https://buildkite.com/jobready/patches)
+![Specs Workflow](https://github.com/rdytech/usi/actions/workflows/specs.yml/badge.svg)
 [![Maintainability](https://api.codeclimate.com/v1/badges/39d142050017ffeb2564/maintainability)](https://codeclimate.com/repos/557f93b76956807f81000001/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/39d142050017ffeb2564/test_coverage)](https://codeclimate.com/repos/557f93b76956807f81000001/test_coverage)
 [![Gem Version](https://badge.fury.io/rb/patches.svg)](https://badge.fury.io/rb/patches)

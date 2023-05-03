@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+Converted to GitHub Actions for CI
+
 ## [3.6.2] - 2022-08-10
 
 Fixes incorrect release - tag and published gem back in sync
