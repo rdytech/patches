@@ -18,7 +18,12 @@ jobs:
           ruby-version: 2.7
           bundler-cache: true
       - name: Run specs
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: bundle exec rspec
+
+      - name: Debug simplecov
+        run: head coverage/.resultset.json
 
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v4.0.0
