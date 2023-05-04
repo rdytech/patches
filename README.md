@@ -1,5 +1,5 @@
 # Patches
-![Specs Workflow](https://github.com/rdytech/usi/actions/workflows/specs.yml/badge.svg)
+[![Run specs](https://github.com/rdytech/patches/actions/workflows/specs.yml/badge.svg)](https://github.com/rdytech/patches/actions/workflows/specs.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/39d142050017ffeb2564/maintainability)](https://codeclimate.com/repos/557f93b76956807f81000001/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/39d142050017ffeb2564/test_coverage)](https://codeclimate.com/repos/557f93b76956807f81000001/test_coverage)
 [![Gem Version](https://badge.fury.io/rb/patches.svg)](https://badge.fury.io/rb/patches)
