@@ -22,10 +22,16 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: bundle exec rspec
 
-      - name: Publish code coverage
-        uses: paambaati/codeclimate-action@v4.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
         with:
-          coverageLocations: |
-            ${{github.workspace}}/coverage/coverage.json:simplecov
+          args: >
+            -Dsonar.organization=readytech
+            -Dsonar.projectKey=rdytech_patches
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.sources=lib/
+            -Dsonar.inclusions=**/*.rb
+            -Dsonar.tests=spec/
+            -Dsonar.ruby.coverage.reportPaths=coverage/.resultset.json
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
