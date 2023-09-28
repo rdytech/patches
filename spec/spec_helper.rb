@@ -5,8 +5,6 @@ RSpec.configure do |config|
     config.default_formatter = 'doc'
   else
     require 'simplecov'
-    require 'simplecov_json_formatter'
-    SimpleCov.formatter = SimpleCov::Formatter::JSONFormatter
     SimpleCov.start
   end
 end

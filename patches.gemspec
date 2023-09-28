@@ -28,8 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec-rails", "~> 4.0.0"
   spec.add_development_dependency "capybara", "~> 2.3.0"
   spec.add_development_dependency "generator_spec", "~> 0.9.0"
-  spec.add_development_dependency "simplecov", "~> 0.21"
-  spec.add_development_dependency "simplecov_json_formatter", "~> 0.1.2"
+  spec.add_development_dependency "simplecov", "~> 0.17", '< 0.18' # sonarscanner requires < 0.18
   spec.add_development_dependency "factory_girl", "~> 4.5.0"
   spec.add_development_dependency "timecop", "~> 0.7.0"
   spec.add_development_dependency "database_cleaner", "~> 1.3.0"
