@@ -63,6 +63,24 @@ end
 *Note:* Make sure your sidekiq queue is able to process concurrent jobs.
 You can use ```config.sidekiq_options``` to customise it.
 
+### Skipping tenants when running patches for multiple tenants
+
+If you are using the Apartment gem, the patches will run across all tenants by default. If you wish to only run patches against a subset of tenants, you can use the `ONLY_TENANTS` env var, like so
+
+```bash
+# This will only run for my_tenant and other_tenant, provided they are listed as tenants by the Apartment gem
+ONLY_TENANTS=my_tenant,other_tenant bundle exec rake patches:run
+```
+
+Similarly if you want to run patches against all tenants _except_ for a select few, you can use the `SKIP_TENANTS` env var, like so
+
+```bash
+# This will run for all tenants EXCEPT my_tenant and other_tenant
+SKIP_TENANTS=my_tenant,other_tenant bundle exec rake patches:run
+```
+
+If you specify both env vars, the `ONLY_TENANTS` env var will take precedence
+
 ### Application version verification
 
 In environments where a rolling update of sidekiq workers is performed during the deployment, multiple versions of the application run at the same time. If a Patches job is scheduled by the new application version during the rolling update, there is a possibility that it can be executed by the old application version, which will not have all the required patch files.
