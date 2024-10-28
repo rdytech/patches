@@ -45,7 +45,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/jobready/patches/fork )
+1. Fork it ( https://github.com/rdytech/patches/fork )
 2. Create your feature branch (`git checkout -b feature/my-feature-name`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin feature/my-new-feature`)
