@@ -2,9 +2,8 @@ class Patches::TenantRunner
   include Patches::TenantRunConcern
   attr_accessor :path
 
-  def initialize(path: nil, tenants: nil)
+  def initialize(path: nil)
     @path = path
-    @tenants = tenants
   end
 
   def perform
@@ -23,7 +22,7 @@ class Patches::TenantRunner
   end
 
   def tenants
-    @tenants ||= (Apartment.tenant_names || [])
+    @tenants ||= Patches::TenantFinder.new.tenant_names
   end
 
   private

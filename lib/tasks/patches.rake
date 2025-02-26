@@ -17,10 +17,6 @@ namespace :patches do
     end
   end
 
-  def tenants
-    ENV['DB'] ? ENV['DB'].split(',').map { |s| s.strip } : Apartment.tenant_names || []
-  end
-
   task :pending => [:environment] do
     Patches::Pending.new.each do |patch|
       puts patch

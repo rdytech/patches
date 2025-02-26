@@ -20,16 +20,11 @@ describe Patches::TenantRunner do
     allow(Patches::Config.configuration).to receive(:application_version) { application_version }
   end
 
-  context 'with tenants' do
-    let(:tenants) { ['tenants'] }
-    subject { described_class.new(tenants: tenants) }
-    specify { expect(subject.tenants).to eql(tenants) }
-  end
-
   context 'perform' do
     let(:tenant_names) { ['test'] }
+    let(:tenant_finder) { double(Patches::TenantFinder, tenant_names: tenant_names) }
 
-    before { expect(Apartment).to receive(:tenant_names).and_return(tenant_names) }
+    before { allow(Patches::TenantFinder).to receive(:new).and_return(tenant_finder) }
 
     specify do
       expect(subject.tenants).to eql(['test'])
