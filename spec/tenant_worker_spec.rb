@@ -22,6 +22,7 @@ describe Patches::TenantWorker do
       context 'when application_version does not match' do
         it 'does not run patches' do
           expect(subject).not_to receive(:run)
+          expect(Patches::TenantWorker).to receive(:perform_in)
           subject.perform('test', 'path', 'application_version' => 'd8f190c')
         end
 

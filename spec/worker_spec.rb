@@ -23,6 +23,7 @@ describe Patches::Worker do
       context 'when application_version does not match' do
         it 'does not run patches' do
           expect(runner).not_to receive(:perform)
+          expect(Patches::Worker).to receive(:perform_in)
           subject.perform('Patches::Runner', 'application_version' => 'd8f190c')
         end
 

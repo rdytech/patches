@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "timecop", "~> 0.7.0"
   spec.add_development_dependency "database_cleaner", "~> 1.3.0"
   spec.add_development_dependency "pry"
-  spec.add_development_dependency "sidekiq", "~> 3.4.1"
+  spec.add_development_dependency "sidekiq", "~> 5.2.1"
   spec.add_development_dependency "webmock"
   spec.add_development_dependency "byebug"
 end

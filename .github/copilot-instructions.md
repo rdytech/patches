@@ -68,7 +68,7 @@ Patches::Config.configure do |config|
   # Optional: Asynchronous execution
   config.use_sidekiq = true
   config.sidekiq_parallel = true  # For multi-tenant parallel execution
-  
+
   # Optional: Slack notifications
   config.use_slack = true
   config.slack_options = {
@@ -76,7 +76,7 @@ Patches::Config.configure do |config|
     channel: ENV['SLACK_CHANNEL'],
     username: ENV['SLACK_USER']
   }
-  
+
   # Optional: Application version validation
   config.application_version = File.read(Rails.root.join('REVISION'))
   config.retry_after_version_mismatch_in = 1.minute
@@ -95,93 +95,3 @@ class PatchName < Patches::Base
   end
 end
 ```
-
-### Deployment Integration
-```ruby
-# Capfile
-require 'patches/capistrano'
-
-# deploy.rb
-after 'deploy:migrate', 'patches:run'
-```
-
-## Development Guidelines
-
-### Code Style
-- Follow standard Ruby/Rails conventions
-- Use descriptive method and variable names
-- Keep patch implementations focused and atomic
-- Include proper error handling and logging
-
-### Testing
-- Write comprehensive RSpec tests for all components
-- Mock external dependencies (Sidekiq, Slack, database)
-- Test both synchronous and asynchronous execution paths
-- Verify multi-tenant functionality when applicable
-
-### Backwards Compatibility
-- Maintain compatibility with Rails 3.2+ and Ruby 3.0+
-- Ensure serialization compatibility with Rails 8+
-- Avoid breaking changes to public API
-- Deprecate features gracefully before removal
-
-### Dependencies
-- Minimize external dependencies
-- Use feature detection for optional components (Sidekiq, Apartment)
-- Keep development dependencies up-to-date but stable
-
-## Common Implementation Patterns
-
-### Patch Structure
-```ruby
-class ExamplePatch < Patches::Base
-  def run
-    # Use transactions for data integrity
-    ActiveRecord::Base.transaction do
-      # Batch process large datasets
-      Model.find_each(batch_size: 1000) do |record|
-        # Process record
-      end
-    end
-    
-    # Log important information
-    Patches.logger.info "Processed #{count} records"
-  end
-end
-```
-
-### Configuration Access
-```ruby
-# Access configuration
-config = Patches::Config.configuration
-if config.use_sidekiq
-  # Async behavior
-else
-  # Sync behavior
-end
-```
-
-### Multi-Tenant Patches
-```ruby
-class TenantSpecificPatch < Patches::Base
-  def run
-    # This automatically runs for each tenant when using TenantRunner
-    current_tenant = Apartment::Tenant.current
-    # Tenant-specific logic
-  end
-end
-```
-
-## Rails 8+ Compatibility Notes
-
-- Ensure serialization methods work with both Rails 7 and 8+ serialization formats
-- Test with both legacy and modern Active Job adapters
-- Validate compatibility with updated Sidekiq integration patterns
-- Handle any changes to Rails engine loading and initialization
-
-## Security Considerations
-
-- Validate all input data in patches
-- Use parameterized queries to prevent SQL injection
-- Avoid exposing sensitive data in logs or Slack notifications
-- Implement proper authorization checks when needed
