@@ -1,0 +1,55 @@
+name: Ruby
+on:
+  pull_request:
+    branches:
+      - develop
+  push:
+    branches:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['3.0', '3.1', '3.2', '3.3', '3.4']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+      - name: Run specs
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        run: bundle exec rspec
+
+      - name: SonarQube Scan
+        if: matrix.ruby-version == '3.2'
+        uses: sonarsource/sonarqube-scan-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=rdytech_patches_4fe7fcf4-bbfc-4b19-be78-87e73d1f301e
+            -Dsonar.host.url=https://sonarqube.readytech.io
+            -Dsonar.sources=lib/
+            -Dsonar.inclusions=**/*.rb
+            -Dsonar.tests=spec/
+            -Dsonar.ruby.coverage.reportPaths=coverage/.resultset.json
+            -Dsonar.plugins.downloadOnlyRequired=true
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=rdytech_patches_4fe7fcf4-bbfc-4b19-be78-87e73d1f301e
+            -Dsonar.host.url=https://sonarqube.readytech.io
+            -Dsonar.sources=lib/
+            -Dsonar.inclusions=**/*.rb
+            -Dsonar.tests=spec/
+            -Dsonar.ruby.coverage.reportPaths=coverage/.resultset.json
+            -Dsonar.plugins.downloadOnlyRequired=true
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

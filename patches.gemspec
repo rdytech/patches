@@ -19,6 +19,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.required_ruby_version = ">= 3.0"
+
   spec.add_dependency "railties", ">= 3.2"
   spec.add_dependency "slack-notifier"
 
@@ -29,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "capybara", "~> 2.3.0"
   spec.add_development_dependency "generator_spec", "~> 0.9.0"
   spec.add_development_dependency "simplecov", "~> 0.17", '< 0.18' # sonarscanner requires < 0.18
-  spec.add_development_dependency "factory_girl", "~> 4.5.0"
+  spec.add_development_dependency "factory_bot_rails", "~> 6.0"
   spec.add_development_dependency "timecop", "~> 0.7.0"
   spec.add_development_dependency "database_cleaner", "~> 1.3.0"
   spec.add_development_dependency "pry"

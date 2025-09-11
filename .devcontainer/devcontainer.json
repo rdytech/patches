@@ -1,0 +1,45 @@
+{
+  "name": "Patches Development",
+  "image": "mcr.microsoft.com/devcontainers/ruby:3.2-bullseye",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rebornix.Ruby",
+        "castwide.solargraph",
+        "kaiwood.endwise",
+        "formulahendry.auto-rename-tag",
+        "ms-vscode.vscode-json",
+        "redhat.vscode-yaml",
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
+      ],
+      "settings": {
+        "ruby.intellisense": "rubyLocate",
+        "ruby.codeCompletion": "rcodetools",
+        "ruby.format": "standard",
+        "files.associations": {
+          "*.rb": "ruby",
+          "Gemfile": "ruby",
+          "Rakefile": "ruby",
+          "*.gemspec": "ruby"
+        }
+      }
+    }
+  },
+
+  "postCreateCommand": "bundle install",
+  
+  "forwardPorts": [3000],
+  
+  "mounts": [
+    "source=patches-bundle,target=/usr/local/bundle,type=volume"
+  ],
+
+  "remoteUser": "vscode"
+}
