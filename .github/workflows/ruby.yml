@@ -39,17 +39,3 @@ jobs:
             -Dsonar.plugins.downloadOnlyRequired=true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
-        with:
-          args: >
-            -Dsonar.projectKey=rdytech_patches_4fe7fcf4-bbfc-4b19-be78-87e73d1f301e
-            -Dsonar.host.url=https://sonarqube.readytech.io
-            -Dsonar.sources=lib/
-            -Dsonar.inclusions=**/*.rb
-            -Dsonar.tests=spec/
-            -Dsonar.ruby.coverage.reportPaths=coverage/.resultset.json
-            -Dsonar.plugins.downloadOnlyRequired=true
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
