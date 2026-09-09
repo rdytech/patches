@@ -22,6 +22,10 @@ bundle exec rake db:migrate
 
 ## Configuration
 
+> **Note.** From 4.0 Patches will not depend on `slack-notifier`, so only
+> applications using Slack carry it. If you set `config.use_slack`, add
+> `gem 'slack-notifier'` to your Gemfile.
+
 If you would like to run the patches asynchronously, or would like them to notify
 your Slack channel when they fail or succeed, you need to set up
 an initializer to set those options.
@@ -112,6 +116,11 @@ bundle exec rake patches:run
 ```
 
 Patches will only ever run once, patches will run in order of creation date.
+
+### Capistrano
+
+> **Deprecated.** `patches/capistrano` is removed in 4.0. Invoke
+> `rake patches:run` from your deployment process instead.
 
 To run patches on deployment using Capistrano, edit your Capfile and add
 

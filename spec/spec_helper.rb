@@ -13,6 +13,13 @@ require 'bundler/setup'
 require 'rails/all'
 require 'active_model'
 require 'active_record'
+# Deprecation notices are asserted in spec/deprecation_spec.rb, which installs
+# its own behaviour; silence them elsewhere so the suite output stays readable.
+# Set before requiring patches, which emits the Ruby/Rails notice as it loads -
+# the matrix includes cells below the floors 4.0 will set.
+require 'patches/deprecation'
+Patches.deprecator.behavior = :silence
+
 require 'patches'
 require 'pry'
 require 'webmock/rspec'

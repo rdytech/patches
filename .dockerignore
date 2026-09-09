@@ -1,0 +1,9 @@
+# Gemfile.lock is not committed, so copying a locally-resolved one would pin the
+# image to whatever the host last used. .git is deliberately NOT excluded: the
+# gemspec builds spec.files from `git ls-files`.
+Gemfile.lock
+.bundle
+vendor
+coverage
+test.db
+*.gem
