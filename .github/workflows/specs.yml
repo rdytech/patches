@@ -41,26 +41,28 @@ jobs:
       - name: Run specs
         run: bundle exec rspec
 
-  # Sidekiq is optional, so it gets its own axis rather than multiplying the
-  # matrix above. All three states a consumer can be in are covered: absent,
-  # present with strict argument checking (the Sidekiq 7+ default), and present
-  # with it disabled. The 6.5 leg covers the Sidekiq::Worker-era fallback path.
-  sidekiq:
-    name: Sidekiq ${{ matrix.sidekiq }} (strict args ${{ matrix.strict_args || 'absent' }})
+  # Sidekiq and Slack are optional integrations, so they get their own axis
+  # rather than multiplying the matrix above. Every state a consumer can be in
+  # is covered: each gem absent, and Sidekiq present with strict argument
+  # checking both at its default and disabled.
+  optional:
+    name: ${{ matrix.name }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { sidekiq: '~> 6.5' }
-          - { sidekiq: '~> 7.0', strict_args: 'raise' }
-          - { sidekiq: '~> 7.0', strict_args: 'false' }
-          - { sidekiq: '~> 8.0', strict_args: 'raise' }
-          - { sidekiq: '~> 8.0', strict_args: 'false' }
-          - { sidekiq: 'none' }
+          - { name: 'Sidekiq 7 (strict args raise)', sidekiq: '~> 7.0', strict_args: 'raise' }
+          - { name: 'Sidekiq 7 (strict args false)', sidekiq: '~> 7.0', strict_args: 'false' }
+          - { name: 'Sidekiq 8 (strict args raise)', sidekiq: '~> 8.0', strict_args: 'raise' }
+          - { name: 'Sidekiq 8 (strict args false)', sidekiq: '~> 8.0', strict_args: 'false' }
+          - { name: 'Sidekiq absent', sidekiq: 'none' }
+          - { name: 'slack-notifier absent', slack_notifier: 'none' }
+          - { name: 'Neither installed', sidekiq: 'none', slack_notifier: 'none' }
     env:
       SIDEKIQ_VERSION: ${{ matrix.sidekiq }}
       SIDEKIQ_STRICT_ARGS: ${{ matrix.strict_args }}
+      SLACK_NOTIFIER: ${{ matrix.slack_notifier }}
     steps:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
@@ -69,8 +71,15 @@ jobs:
           bundler-cache: true
       - name: Run specs
         run: |
-          if [ "$SIDEKIQ_VERSION" = "none" ]; then
-            bundle exec rspec --exclude-pattern "sidekiq/**/*_spec.rb"
+          # --exclude-pattern does not accumulate; the patterns go in one
+          # comma-separated value.
+          patterns=""
+          [ "$SIDEKIQ_VERSION" = "none" ] && patterns="sidekiq/**/*_spec.rb"
+          if [ "$SLACK_NOTIFIER" = "none" ]; then
+            patterns="${patterns:+$patterns,}slack/**/*_spec.rb"
+          fi
+          if [ -n "$patterns" ]; then
+            bundle exec rspec --exclude-pattern "$patterns"
           else
             bundle exec rspec
           fi
