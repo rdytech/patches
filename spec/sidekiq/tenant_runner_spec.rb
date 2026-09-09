@@ -38,6 +38,19 @@ describe Patches::TenantRunner do
         expect { subject.perform }.to change(Patches::TenantWorker.jobs, :size).by(1)
       end
 
+      context 'with a Pathname path' do
+        # Sidekiq 7+ raises on arguments that are not native JSON types, and
+        # Patches.default_path returns a Pathname.
+        subject { described_class.new(path: Pathname.new('/app/db/patches')) }
+
+        specify do
+          expect(Patches::TenantWorker).to receive(:perform_async)
+            .with('test', '/app/db/patches', { 'application_version' => application_version })
+            .and_call_original
+          expect { subject.perform }.to change(Patches::TenantWorker.jobs, :size).by(1)
+        end
+      end
+
       context 'for multiple tenants' do
         let(:tenant_names) { ['test', 'test2'] }
 
