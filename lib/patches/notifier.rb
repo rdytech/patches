@@ -36,7 +36,7 @@ class Patches::Notifier
     end
 
     def environment_prefix
-      Rails.env.upcase if defined?(Rails)
+      Rails.env.upcase
     end
 
     def notification_suffix
