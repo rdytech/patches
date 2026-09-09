@@ -14,6 +14,13 @@ module Patches
   MINIMUM_RUBY_IN_4_0 = '3.2'.freeze
   MINIMUM_RAILS_IN_4_0 = '7.2'.freeze
 
+  def self.warn_capistrano_support_removed_in_4_0
+    deprecator.warn(
+      'patches/capistrano is deprecated and will be removed in 4.0. Invoke ' \
+      '`rake patches:run` from your deployment process instead.'
+    )
+  end
+
   def self.warn_about_versions_dropped_in_4_0
     if Gem::Version.new(RUBY_VERSION) < Gem::Version.new(MINIMUM_RUBY_IN_4_0)
       deprecator.warn(

@@ -113,6 +113,11 @@ bundle exec rake patches:run
 
 Patches will only ever run once, patches will run in order of creation date.
 
+### Capistrano
+
+> **Deprecated.** `patches/capistrano` is removed in 4.0. Invoke
+> `rake patches:run` from your deployment process instead.
+
 To run patches on deployment using Capistrano, edit your Capfile and add
 
 ```ruby

@@ -159,6 +159,7 @@ Patches.deprecator.behavior = :silence  # or :raise, :log, a lambda...
 
 | Deprecated | Replacement |
 |---|---|
+| `require 'patches/capistrano'` | Invoke `rake patches:run` from your deployment process. The Capistrano task is removed in 4.0 |
 | Sidekiq older than 6.3 | Any supported Sidekiq (7.x or 8.x). 4.0 is expected to include `Sidekiq::Job` directly instead of falling back to `Sidekiq::Worker` |
 | Ruby older than 3.2, Rails older than 7.2 | Ruby 3.2+ and Rails 7.2+. 4.0 is expected to raise the gemspec floors to these, which are higher than the range CI verifies today |
 

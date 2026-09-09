@@ -17,6 +17,14 @@ describe 'deprecations announced for 4.0' do
     expect(Patches.deprecator.deprecation_horizon).to eql('4.0')
   end
 
+  describe 'Capistrano support' do
+    it 'warns that it is removed in 4.0, naming the replacement' do
+      Patches.warn_capistrano_support_removed_in_4_0
+      expect(@messages.join).to include('patches/capistrano is deprecated')
+      expect(@messages.join).to include('rake patches:run')
+    end
+  end
+
   describe 'version support' do
     # Both dimensions are stubbed in every example: the suite itself runs on
     # Rubies either side of the announced floor, so leaving one to the ambient
