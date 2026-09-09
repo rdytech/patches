@@ -54,26 +54,54 @@ consumer can be in:
 
 ### Running one combination locally
 
-The Gemfile reads the same variables CI sets, so any cell above is reproducible:
+The Gemfile reads the same variables CI sets, so any cell above is reproducible.
+Bundler re-evaluates the Gemfile on every invocation, so **export** them rather
+than prefixing a single command — otherwise `bundle exec` silently resolves the
+defaults and you test something other than what you intended:
 
 ```
-RAILS_VERSION="~> 8.0.0" bundle install
-bundle exec rspec
+export RAILS_VERSION="~> 8.0.0"
 
-SIDEKIQ_VERSION=none bundle install
+bundle install
+bundle exec rspec
+```
+
+Without Sidekiq at all, which is what a consumer that does not use it gets:
+
+```
+export SIDEKIQ_VERSION=none
+
+bundle install
 bundle exec rspec --exclude-pattern "sidekiq/**/*_spec.rb"
-
-SIDEKIQ_VERSION="~> 7.0" SIDEKIQ_STRICT_ARGS=false bundle install && bundle exec rspec
 ```
 
-Rails 6.1 and 7.0 need two pins if you do want to check them, neither caused by
-Patches - Rails <= 7.0 pins its sqlite3 adapter to `~> 1.4`, and Rails < 7.1
-predates `concurrent-ruby` 1.3.5 removing a `Logger` constant it relies on:
+With Sidekiq 7 and strict argument checking turned off:
 
 ```
-RAILS_VERSION="~> 6.1.0" SQLITE3_VERSION="~> 1.4" CONCURRENT_RUBY_VERSION="< 1.3.5" bundle install
+export SIDEKIQ_VERSION="~> 7.0" SIDEKIQ_STRICT_ARGS=false
+
+bundle install
 bundle exec rspec
 ```
+
+Rails 6.1 and 7.0 need two extra pins if you do want to check them, neither
+caused by Patches — Rails <= 7.0 pins its sqlite3 adapter to `~> 1.4`, and Rails
+< 7.1 predates `concurrent-ruby` 1.3.5 removing a `Logger` constant it relies
+on:
+
+```
+export RAILS_VERSION="~> 6.1.0" \
+       SQLITE3_VERSION="~> 1.4" \
+       CONCURRENT_RUBY_VERSION="< 1.3.5"
+
+bundle install
+bundle exec rspec
+```
+
+`unset` the variables (or use a fresh shell) before running the default
+combination again, and delete `test.db` when switching between them: the suite
+creates `patches_patches` only when it is missing, so a database left by an
+earlier run can mask ordering problems.
 
 ## Installation
 
