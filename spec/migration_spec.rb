@@ -17,23 +17,31 @@ describe 'db/migrate/201506011700_create_patch.rb' do
     expect(CreatePatch.superclass).to be < ActiveRecord::Migration
   end
 
-  it 'creates the patches_patches table with a unique path index' do
-    load migration_path
-    connection = ActiveRecord::Base.connection
-    connection.drop_table(:patches_patches, if_exists: true)
+  describe 'running it' do
+    # Against a throwaway in-memory database, never the shared one: migrating
+    # that would leave Patches::Patch holding column information for a table it
+    # had just dropped, failing whichever spec ran next.
+    around do |example|
+      original = ActiveRecord::Base.connection_db_config
+      ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
+      example.run
+    ensure
+      ActiveRecord::Base.establish_connection(original)
+      Patches::Patch.reset_column_information
+    end
 
-    CreatePatch.new.tap { |m| m.verbose = false }.migrate(:up)
+    it 'creates the patches_patches table with a unique path index' do
+      load migration_path
+      CreatePatch.new.tap { |migration| migration.verbose = false }.migrate(:up)
 
-    expect(connection.table_exists?(:patches_patches)).to be true
-    expect(connection.columns(:patches_patches).map(&:name)).to include('path', 'created_at', 'updated_at')
-    path_index = connection.indexes(:patches_patches).find { |i| i.columns == ['path'] }
-    expect(path_index).not_to be_nil
-    expect(path_index.unique).to be true
-  ensure
-    connection&.drop_table(:patches_patches, if_exists: true)
-    connection&.create_table(:patches_patches) do |t|
-      t.string :path
-      t.timestamps
+      connection = ActiveRecord::Base.connection
+      expect(connection.table_exists?(:patches_patches)).to be true
+      expect(connection.columns(:patches_patches).map(&:name))
+        .to include('path', 'created_at', 'updated_at')
+
+      path_index = connection.indexes(:patches_patches).find { |index| index.columns == ['path'] }
+      expect(path_index).not_to be_nil
+      expect(path_index.unique).to be true
     end
   end
 end
