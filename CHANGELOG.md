@@ -44,7 +44,7 @@ deprecations comes in 3.7.0, raising minimums in 4.0.0.
   version to appear on RubyGems, so a release that does not land fails loudly -
   `3.6.1` was tagged and released on GitHub but never published, and nothing
   reported it
-- CI now runs 14 Ruby/Rails combinations (Ruby 3.0-3.4 against Rails 7.1-8.1)
+- CI now runs 17 Ruby/Rails combinations (Ruby 3.0-4.0 against Rails 7.1-8.1)
   in place of a single Ruby 2.7 cell, plus a leg for each Sidekiq state:
   absent, 6.5, and 7.x/8.x with strict arguments both on and off. Ruby 2.7 and
   Rails 6.1/7.0 are not exercised, being well past upstream support; they are

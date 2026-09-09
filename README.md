@@ -29,10 +29,14 @@ gem permits - older Ruby and Rails are untested here, not blocked.
 | **Ruby 3.2** | ✅ | ✅ | ✅ | ✅ |
 | **Ruby 3.3** | ✅ | ✅ | ✅ | ✅ |
 | **Ruby 3.4** | | ✅ | ✅ | ✅ |
+| **Ruby 4.0** | | ✅ | ✅ | ✅ |
 
 A blank cell is a pairing Rails itself does not support. Ruby 2.7 and Rails
 6.1/7.0 are deliberately not exercised - they are well past upstream support -
 though the gem still installs and, as of this release, passes on them.
+
+Ruby 4.0 is newer than all of these Rails releases, so those cells record that
+Patches is verified on it, not that Rails claims support for it.
 
 ### Sidekiq
 
