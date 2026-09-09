@@ -128,9 +128,32 @@ see [docs/usage.md](docs/usage.md)
 
 ## Development
 
+In VS Code or Codespaces, open the repository in the dev container - it reuses
+the `app` service from `docker-compose.yml`, so there is one definition of the
+environment rather than two. Otherwise, from a shell:
+
 ```
-docker-compose build
-docker-compose run app bundle exec rspec
+docker compose build
+docker compose run --rm app
+```
+
+The container's default command runs the specs. Any cell of the matrix above is
+reproducible in it - the Ruby version is a build argument, and the gem versions
+are passed through from your shell:
+
+```
+docker compose build --build-arg RUBY_VERSION=3.1
+RAILS_VERSION="~> 7.1.0" docker compose run --rm app
+
+SIDEKIQ_VERSION=none docker compose run --rm app \
+  bundle exec rspec --exclude-pattern "sidekiq/**/*_spec.rb"
+```
+
+Or without Docker, if you have the Ruby you want on your path:
+
+```
+bundle install
+bundle exec rspec
 ```
 
 To install this gem onto your local machine, run `bundle exec rake install`.
