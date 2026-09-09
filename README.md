@@ -80,17 +80,21 @@ Sidekiq is an **optional** integration, not a runtime dependency: Patches runs
 each patch inline when Sidekiq is absent. Set `config.use_sidekiq = true` to run
 them in the background - see [docs/usage.md](docs/usage.md).
 
-The workers resolve their mixin at load time via `Patches.sidekiq_job_module`,
-preferring `Sidekiq::Job` (the name Sidekiq has used since 6.3) and falling back
-to `Sidekiq::Worker`, so older Sidekiq keeps working. CI covers each state a
-consumer can be in:
+The workers include `Sidekiq::Job`, so Sidekiq 6.3 or newer is required when the
+integration is used - 6.2 and earlier predate that constant. CI covers each
+state a consumer can be in:
 
 | State | Covered by |
 |---|---|
 | Sidekiq not installed | A leg omitting the gem entirely, exercising the `defined?(Sidekiq)` guards |
 | Installed, strict arguments on | Sidekiq 7.x and 8.x at their default (`:raise`) |
 | Installed, strict arguments off | Sidekiq 7.x and 8.x with `Sidekiq.strict_args!(false)` |
-| Older Sidekiq | A 6.5 leg, plus a spec covering the `Sidekiq::Worker` fallback |
+
+### Slack
+
+Slack notifications are optional and Patches does not install
+`slack-notifier` - add `gem 'slack-notifier'` to your own Gemfile if you set
+`config.use_slack`. CI runs a leg without it to keep that path honest.
 
 ### Running one combination locally
 
@@ -156,7 +160,6 @@ Patches.deprecator.behavior = :silence  # or :raise, :log, a lambda...
 
 | Deprecated | Replacement |
 |---|---|
-| Sidekiq older than 6.3 | Any supported Sidekiq (7.x or 8.x). 4.0 is expected to include `Sidekiq::Job` directly instead of falling back to `Sidekiq::Worker` |
 | Ruby older than 3.2, Rails older than 7.2 | Ruby 3.2+ and Rails 7.2+. 4.0 is expected to raise the gemspec floors to these, which are higher than the range CI verifies today |
 
 Nothing is removed in this release, and the gemspec floors are unchanged, so
