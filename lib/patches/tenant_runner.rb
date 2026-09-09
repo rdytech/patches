@@ -14,7 +14,7 @@ class Patches::TenantRunner
         Patches::TenantWorker.perform_async(
           tenant,
           path,
-          application_version: Patches::Config.configuration.application_version
+          'application_version' => Patches::Config.configuration.application_version
         )
       else
         run(tenant, path)

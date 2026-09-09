@@ -9,8 +9,8 @@ namespace :patches do
 
     if defined?(Sidekiq) && Patches::Config.configuration.use_sidekiq
       Patches::Worker.perform_async(
-        runner,
-        application_version: Patches::Config.configuration.application_version
+        runner.name,
+        'application_version' => Patches::Config.configuration.application_version
       )
     else
       runner.new.perform

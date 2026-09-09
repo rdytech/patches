@@ -1,12 +1,13 @@
-require 'sidekiq'
+require 'patches/sidekiq_job'
 
 class Patches::Worker
-  include Sidekiq::Worker
+  include Patches.sidekiq_job_module
   include Patches::ApplicationVersionValidation
 
   sidekiq_options Patches::Config.configuration.sidekiq_options
 
   def perform(runner, params = {})
+    params = (params || {}).transform_keys(&:to_s)
     if valid_application_version?(params['application_version'])
       runner.constantize.new.perform
     else

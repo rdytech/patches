@@ -1,7 +1,22 @@
 require 'spec_helper'
 require "patches/worker"
 
+require 'sidekiq/testing'
+
 describe Patches::Worker do
+  describe '.perform_async' do
+    before { Sidekiq::Testing.fake! }
+    after { Patches::Worker.jobs.clear }
+
+    # Sidekiq >= 7 enables strict argument checking by default, so every
+    # argument must be a native JSON type.
+    it 'enqueues with strict-args compatible arguments' do
+      expect {
+        Patches::Worker.perform_async('Patches::Runner', 'application_version' => 'd8f190c')
+      }.to change(Patches::Worker.jobs, :size).by(1)
+    end
+  end
+
   describe '#perform' do
     let(:runner) { instance_double(Patches::Runner, perform: true) }
 
@@ -27,7 +42,7 @@ describe Patches::Worker do
         end
 
         it 'reschedules the job' do
-          expect(Patches::Worker).to receive(:perform_in).with(1.minute, 'Patches::Runner', 'application_version' => 'd8f190c')
+          expect(Patches::Worker).to receive(:perform_in).with(1.minute, 'Patches::Runner', { 'application_version' => 'd8f190c' })
           subject.perform('Patches::Runner', 'application_version' => 'd8f190c')
         end
       end

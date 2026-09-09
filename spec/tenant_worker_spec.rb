@@ -26,7 +26,7 @@ describe Patches::TenantWorker do
         end
 
         it 'reschedules the job' do
-          expect(Patches::TenantWorker).to receive(:perform_in).with(1.minute, 'test', 'path', 'application_version' => 'd8f190c')
+          expect(Patches::TenantWorker).to receive(:perform_in).with(1.minute, 'test', 'path', { 'application_version' => 'd8f190c' })
           subject.perform('test', 'path', 'application_version' => 'd8f190c')
         end
       end

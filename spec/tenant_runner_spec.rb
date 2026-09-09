@@ -42,7 +42,7 @@ describe Patches::TenantRunner do
 
       specify do
         expect(subject.tenants).to eql(['test'])
-        expect(Patches::TenantWorker).to receive(:perform_async).with('test', nil, application_version: application_version).and_call_original
+        expect(Patches::TenantWorker).to receive(:perform_async).with('test', nil, { 'application_version' => application_version }).and_call_original
         expect { subject.perform }.to change(Patches::TenantWorker.jobs, :size).by(1)
       end
 
@@ -51,8 +51,8 @@ describe Patches::TenantRunner do
 
         specify do
           expect(subject.tenants).to eql(['test', 'test2'])
-          expect(Patches::TenantWorker).to receive(:perform_async).with('test', nil, application_version: application_version).and_call_original
-          expect(Patches::TenantWorker).to receive(:perform_async).with('test2', nil, application_version: application_version).and_call_original
+          expect(Patches::TenantWorker).to receive(:perform_async).with('test', nil, { 'application_version' => application_version }).and_call_original
+          expect(Patches::TenantWorker).to receive(:perform_async).with('test2', nil, { 'application_version' => application_version }).and_call_original
           expect { subject.perform }.to change(Patches::TenantWorker.jobs, :size).by(2)
         end
       end
