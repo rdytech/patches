@@ -35,5 +35,3 @@ version already exists.
   [Trusted Publishing: adding a publisher](https://guides.rubygems.org/trusted-publishing/adding-a-publisher/).
   Until this is done, the release will fail while configuring credentials. The gem currently lists
   a single owner, handle `jr`.
-- **GitHub Packages**: the workflow carries a `packages: write` permission, inherited from the
-  shared workflow, but no step publishes there and nothing is pushed to it.

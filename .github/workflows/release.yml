@@ -7,7 +7,6 @@ on:
 permissions:
   contents: write   # rake release (via rubygems/release-gem) pushes the tag; no-op here since it's already pushed
   id-token: write   # RubyGems.org OIDC trusted publishing
-  packages: write   # GitHub Packages push
 
 jobs:
   release:
