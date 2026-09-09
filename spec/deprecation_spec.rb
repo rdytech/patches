@@ -18,6 +18,10 @@ describe 'deprecations announced for 4.0' do
   end
 
   describe 'Slack notifications' do
+    # A fresh configuration each time: the notice fires once per instance, and
+    # other spec files set use_slack on the shared one, so without this the
+    # examples pass or fail depending on the random order.
+    before { Patches::Config.configuration = nil }
     after { Patches::Config.configuration = nil }
 
     it 'warns when they are enabled that slack-notifier becomes the host\'s' do
