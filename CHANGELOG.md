@@ -58,6 +58,16 @@ deprecations comes in 3.7.0, raising minimums in 4.0.0.
 - Sidekiq-dependent specs moved under `spec/sidekiq/` so the suite runs with the
   gem absent
 
+### Known issues
+- The install migration now declares `ActiveRecord::Migration[5.0]`, and
+  `ActiveRecord::Migration.[]` does not exist before Rails 5.0. A *fresh*
+  install on Rails 4.2 or earlier therefore needs `patches_patches` created by
+  hand - the table it wants is a `path` string, timestamps, and a unique index
+  on `path`. Existing installs are unaffected, having already copied the
+  migration into the host application. Those versions are far outside the range
+  CI verifies, and the previous file could not be loaded by any Rails from 5.0
+  on, so this trades an impossible install for an unlikely one
+
 ### Removed
 - `lib/generators/patches.rb`, a dead duplicate of the patch generator that
   wrote to `app/db/` from a template (`patch.erb`) that does not exist. Not
