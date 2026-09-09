@@ -37,14 +37,3 @@ version already exists.
   a single owner, handle `jr`.
 - **GitHub Packages**: the workflow carries a `packages: write` permission, inherited from the
   shared workflow, but no step publishes there and nothing is pushed to it.
-
-## Why this exists
-
-Six tagged versions never reached RubyGems.org — `2.0.1`, `2.1.0`, `2.2.0`, `2.3.0`, `3.0.0` and
-`3.6.1` — and nothing reported the gap. The `3.6.2` entry in `CHANGELOG.md` ("Fixes incorrect
-release - tag and published gem back in sync") is the visible trace of the most recent one:
-`3.6.1` was tagged and released on GitHub but never published, because
-`.github/workflows/publish.yml` was added the same day and has never run.
-
-`rubygems/release-gem` waits for the new version to appear on RubyGems.org before the job
-succeeds, so a release that does not land now fails loudly instead of passing unnoticed.
