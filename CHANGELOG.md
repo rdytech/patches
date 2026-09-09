@@ -6,7 +6,53 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-Converted to GitHub Actions for CI
+## [3.7.0] - 2026-09-10
+
+Declares dependencies the gem always relied on, and announces what 4.0 is
+expected to require. No public API changes and no version constraint moves, so
+anything that installed 3.6.x installs this.
+
+### Added
+- Gem metadata (`source_code_uri`, `changelog_uri`, `bug_tracker_uri`,
+  `documentation_uri`). None were declared, so rubygems.org kept showing values
+  carried over from older releases - 3.6.3 still lists `source_code_uri` as
+  `http://github.com/jobready/patches`, from before the org was renamed
+- `activerecord` as an explicit runtime dependency, at the same `>= 3.2` floor
+  as `railties` so nothing currently installable is excluded. `Patches::Patch`
+  subclasses `ActiveRecord::Base` and `Patches::Base#execute` calls
+  `ActiveRecord::Base.connection`, but only `railties` had been declared
+- `Patches.deprecator`, a gem-owned `ActiveSupport::Deprecation` instance rather
+  than the singleton Rails 7.1 deprecated and 8.0 removed. Host applications can
+  silence or redirect it with `Patches.deprecator.behavior = :silence`
+- A deprecation warning when `config.use_slack` is set: from 4.0 Patches will
+  not depend on `slack-notifier`, so only applications using Slack carry it.
+  Add `gem 'slack-notifier'` to your Gemfile to keep notifications working
+- A deprecation warning on `require 'patches/capistrano'`. The Capistrano task
+  is removed in 4.0; invoke `rake patches:run` from your deployment process
+  instead. It remains opt-in and loads nothing unless a Capfile requires it
+- Deprecation warnings for the two other things 4.0 is expected to require:
+  Sidekiq 6.3 or newer, which is where `Sidekiq::Job` arrives, and Ruby 3.0 /
+  Rails 7.1, the oldest versions CI verifies. The Ruby and Rails notice is
+  emitted once when the gem loads
+
+### Changed
+- The published gem carries only what a consumer needs - 27 files rather than
+  42. `Dockerfile`, `docker-compose.yml`, `.devcontainer/`, `.github/`, `bin/`,
+  `Rakefile`, `RELEASING.md` and a decorative image were being packaged. `lib`,
+  the install migration, `docs/usage.md` and the top-level docs remain
+- The development container works again. It was pinned to `ruby:2.3`, which
+  cannot satisfy the current Gemfile, and had not been touched since 2018. The
+  Ruby version is now a build argument and the gem versions are passed through
+  from the shell, so any cell of the matrix in README.md is reproducible in it.
+  A `.devcontainer/` referencing the same compose service comes with it, for
+  VS Code and Codespaces
+
+### Removed
+- `.github/workflows/publish.yml`. It published on `release: published` using a
+  `GEM_HOST_API_KEY`, had never run in the four years since it was added, and
+  would now attempt a duplicate push if a GitHub Release were created after a
+  tag. Releases come from `.github/workflows/release.yml` - see
+  [RELEASING.md](RELEASING.md)
 
 ## [3.6.3] - 2026-09-09
 
