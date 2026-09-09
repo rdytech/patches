@@ -117,26 +117,18 @@ bundle exec rake patches:run
 
 Patches will only ever run once, patches will run in order of creation date.
 
-### Capistrano
+### Running on deploy
 
-> **Deprecated.** `patches/capistrano` is removed in 4.0. Invoke
-> `rake patches:run` from your deployment process instead.
+Invoke the rake task from your deployment process, after the application code is
+in place:
 
-To run patches on deployment using Capistrano, edit your Capfile and add
-
-```ruby
-require 'patches/capistrano'
+```
+bundle exec rake patches:run
 ```
 
-And then in your deploy.rb
-
-```ruby
-after 'last_task_you_want_to_run' 'patches:run'
-```
-
-If you are using sidekiq and restarting the sidekiq process on the box
-as a part of the deploy process, please make sure that the patches run task runs
-after sidekiq restarts, otherwise there is no guarentee the tasks will run.
+If you use Sidekiq and restart it as part of the deploy, make sure the patches
+task runs after Sidekiq restarts - otherwise there is no guarantee the jobs will
+be picked up.
 
 ## File Download
 
