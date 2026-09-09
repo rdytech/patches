@@ -14,6 +14,14 @@ module Patches
   MINIMUM_RUBY_IN_4_0 = '3.2'.freeze
   MINIMUM_RAILS_IN_4_0 = '7.2'.freeze
 
+  def self.warn_slack_notifier_dependency_removed_in_4_0
+    deprecator.warn(
+      'patches will stop depending on slack-notifier in 4.0, so that only ' \
+      "applications using Slack carry it. Add gem 'slack-notifier' to your " \
+      'Gemfile to keep notifications working.'
+    )
+  end
+
   def self.warn_capistrano_support_removed_in_4_0
     deprecator.warn(
       'patches/capistrano is deprecated and will be removed in 4.0. Invoke ' \

@@ -1,3 +1,5 @@
+require 'patches/deprecation'
+
 module Patches
   class Config
     class << self
@@ -28,6 +30,13 @@ module Patches
 
         def initialize
           @sidekiq_queue = 'default'
+        end
+
+        # Only warns for applications that actually enable Slack, and only once
+        # at configuration time rather than on every notification.
+        def use_slack=(enabled)
+          Patches.warn_slack_notifier_dependency_removed_in_4_0 if enabled
+          @use_slack = enabled
         end
 
         def sidekiq_options

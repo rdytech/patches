@@ -17,6 +17,21 @@ describe 'deprecations announced for 4.0' do
     expect(Patches.deprecator.deprecation_horizon).to eql('4.0')
   end
 
+  describe 'Slack notifications' do
+    after { Patches::Config.configuration = nil }
+
+    it 'warns when they are enabled that slack-notifier becomes the host\'s' do
+      Patches::Config.configuration.use_slack = true
+      expect(@messages.join).to include('slack-notifier')
+      expect(@messages.join).to include("gem 'slack-notifier'")
+    end
+
+    it 'stays quiet when they are not enabled' do
+      Patches::Config.configuration.use_slack = false
+      expect(@messages).to be_empty
+    end
+  end
+
   describe 'Capistrano support' do
     it 'warns that it is removed in 4.0, naming the replacement' do
       Patches.warn_capistrano_support_removed_in_4_0
