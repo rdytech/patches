@@ -14,6 +14,13 @@ Gem::Specification.new do |spec|
   spec.description   = %q{A simple gem for one off tasks for example database patches}
   spec.homepage      = "https://github.com/rdytech/patches"
 
+  spec.metadata = {
+    "source_code_uri"   => spec.homepage,
+    "changelog_uri"     => "#{spec.homepage}/blob/develop/CHANGELOG.md",
+    "bug_tracker_uri"   => "#{spec.homepage}/issues",
+    "documentation_uri" => "#{spec.homepage}/blob/develop/docs/usage.md"
+  }
+
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
