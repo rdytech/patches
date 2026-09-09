@@ -3,6 +3,7 @@
 # gemspec builds spec.files from `git ls-files`.
 Gemfile.lock
 .bundle
+vendor
 coverage
 test.db
 *.gem

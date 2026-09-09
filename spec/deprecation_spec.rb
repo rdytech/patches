@@ -40,6 +40,37 @@ describe 'deprecations announced for 4.0' do
     end
   end
 
+  describe 'when the notice runs' do
+    # It used to fire at require time, during Bundler.require, which is before
+    # config/initializers - so the documented silencing could never apply.
+    let(:initializer) do
+      Patches::Engine.initializers.find { |i| i.name == 'patches.version_deprecations' }
+    end
+
+    it 'is deferred to a Rails initializer, after the application ones' do
+      expect(initializer).not_to be_nil
+      expect(initializer.after).to eql(:load_config_initializers)
+    end
+
+    it 'warns when that initializer runs' do
+      stub_const('RUBY_VERSION', '3.1.4')
+      stub_const('Rails::VERSION::STRING', '8.1.0')
+
+      initializer.block.call
+
+      expect(@messages.join).to include('Ruby 3.1.4 will not be supported by patches 4.0')
+    end
+
+    it 'does not warn merely by requiring the gem' do
+      messages = []
+      Patches.deprecator.behavior = ->(message, *) { messages << message }
+
+      load File.expand_path('../lib/patches.rb', __dir__)
+
+      expect(messages).to be_empty
+    end
+  end
+
   describe 'version support' do
     # Both dimensions are stubbed in every example: the suite itself runs on
     # Rubies either side of the announced floor, so leaving one to the ambient

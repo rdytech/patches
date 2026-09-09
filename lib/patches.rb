@@ -33,5 +33,3 @@ require "patches/runner"
 require "patches/tenant_runner"
 require "patches/notifier"
 require "patches/worker" if defined?(Sidekiq)
-
-Patches.warn_about_versions_dropped_in_4_0

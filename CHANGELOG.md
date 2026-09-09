@@ -31,9 +31,11 @@ anything that installed 3.6.x installs this.
   is removed in 4.0; invoke `rake patches:run` from your deployment process
   instead. It remains opt-in and loads nothing unless a Capfile requires it
 - Deprecation warnings for the two other things 4.0 is expected to require:
-  Sidekiq 6.3 or newer, which is where `Sidekiq::Job` arrives, and Ruby 3.0 /
-  Rails 7.1, the oldest versions CI verifies. The Ruby and Rails notice is
-  emitted once when the gem loads
+  Sidekiq 6.3 or newer, which is where `Sidekiq::Job` arrives, and Ruby 3.2 /
+  Rails 7.2. Those floors are higher than the range CI verifies - Ruby 3.0 and
+  Rails 7.1 still pass - so anyone below them hears about it a release ahead.
+  The Ruby and Rails notice runs from a Rails initializer, after the
+  application's own, so `Patches.deprecator.behavior` can silence it
 
 ### Changed
 - The published gem carries only what a consumer needs - 27 files rather than

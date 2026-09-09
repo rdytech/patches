@@ -32,10 +32,15 @@ module Patches
           @sidekiq_queue = 'default'
         end
 
-        # Only warns for applications that actually enable Slack, and only once
-        # at configuration time rather than on every notification.
+        # Warns only for applications that enable Slack, and only the first time
+        # - an initializer that reloads, or configures twice, should not repeat
+        # the notice.
         def use_slack=(enabled)
-          Patches.warn_slack_notifier_dependency_removed_in_4_0 if enabled
+          if enabled && !@warned_about_slack_notifier
+            @warned_about_slack_notifier = true
+            Patches.warn_slack_notifier_dependency_removed_in_4_0
+          end
+
           @use_slack = enabled
         end
 

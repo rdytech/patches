@@ -179,15 +179,18 @@ docker compose run --rm app
 ```
 
 The container's default command runs the specs. Any cell of the matrix above is
-reproducible in it - the Ruby version is a build argument, and the gem versions
-are passed through from your shell:
+reproducible in it: the Ruby version is a build argument, and the gem versions
+are passed through from your shell. The image is built with the default
+versions, so a non-default cell has to install them first:
 
 ```
 docker compose build --build-arg RUBY_VERSION=3.1
-RAILS_VERSION="~> 7.1.0" docker compose run --rm app
+
+RAILS_VERSION="~> 7.1.0" docker compose run --rm app \
+  sh -c 'bundle install && bundle exec rspec'
 
 SIDEKIQ_VERSION=none docker compose run --rm app \
-  bundle exec rspec --exclude-pattern "sidekiq/**/*_spec.rb"
+  sh -c 'bundle install && bundle exec rspec --exclude-pattern "sidekiq/**/*_spec.rb"'
 ```
 
 Or without Docker, if you have the Ruby you want on your path:

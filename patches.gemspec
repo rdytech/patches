@@ -16,9 +16,9 @@ Gem::Specification.new do |spec|
 
   spec.metadata = {
     "source_code_uri"   => spec.homepage,
-    "changelog_uri"     => "#{spec.homepage}/blob/develop/CHANGELOG.md",
+    "changelog_uri"     => "#{spec.homepage}/blob/v#{Patches::VERSION}/CHANGELOG.md",
     "bug_tracker_uri"   => "#{spec.homepage}/issues",
-    "documentation_uri" => "#{spec.homepage}/blob/develop/docs/usage.md"
+    "documentation_uri" => "#{spec.homepage}/blob/v#{Patches::VERSION}/docs/usage.md"
   }
 
   # Only what a consumer needs: the library (including the generator templates,
