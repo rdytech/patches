@@ -19,21 +19,25 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  # Runtime constraints are deliberately unchanged here: raising a minimum can
+  # block an install that works today, which is a major-version change.
+  # README.md records the range CI actually verifies. Declaring activerecord
+  # (Patches::Patch subclasses ActiveRecord::Base) and bounding slack-notifier
+  # are queued for the next minor.
   spec.add_dependency "railties", ">= 3.2"
   spec.add_dependency "slack-notifier"
 
   spec.add_development_dependency "bundler", "> 1.8"
   spec.add_development_dependency "rake", "> 10.0"
-  spec.add_development_dependency "sqlite3", "> 1.3.5"
-  spec.add_development_dependency "rspec-rails", "~> 4.0.0"
-  spec.add_development_dependency "capybara", "~> 2.3.0"
-  spec.add_development_dependency "generator_spec", "~> 0.9.0"
+  spec.add_development_dependency "rspec", "~> 3.13"
   spec.add_development_dependency "simplecov", "~> 0.17", '< 0.18' # sonarscanner requires < 0.18
-  spec.add_development_dependency "factory_girl", "~> 4.5.0"
-  spec.add_development_dependency "timecop", "~> 0.7.0"
-  spec.add_development_dependency "database_cleaner", "~> 1.3.0"
   spec.add_development_dependency "pry"
-  spec.add_development_dependency "sidekiq", "~> 3.4.1"
   spec.add_development_dependency "webmock"
-  spec.add_development_dependency "byebug"
+
+  # rails, sqlite3, sidekiq and concurrent-ruby live in the Gemfile so CI can
+  # vary them across the range documented in README.md. capybara, factory_girl,
+  # timecop, generator_spec, byebug and database_cleaner were referenced by no
+  # spec, and rspec-rails was never required, so plain rspec replaces it.
+  # Sidekiq is an optional integration, not a runtime dependency, and the suite
+  # is expected to pass without it installed.
 end

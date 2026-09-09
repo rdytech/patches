@@ -11,7 +11,6 @@ end
 
 require 'bundler/setup'
 require 'rails/all'
-require 'database_cleaner'
 require 'active_model'
 require 'active_record'
 require 'patches'
