@@ -22,9 +22,8 @@ bundle exec rake db:migrate
 
 ## Configuration
 
-> **Note.** From 4.0 Patches will not depend on `slack-notifier`, so only
-> applications using Slack carry it. If you set `config.use_slack`, add
-> `gem 'slack-notifier'` to your Gemfile.
+> **Note.** Patches does not depend on `slack-notifier`. If you set
+> `config.use_slack`, add `gem 'slack-notifier'` to your own Gemfile.
 
 If you would like to run the patches asynchronously, or would like them to notify
 your Slack channel when they fail or succeed, you need to set up

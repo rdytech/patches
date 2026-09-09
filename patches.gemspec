@@ -37,7 +37,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency "railties", ">= 7.2"
   spec.add_dependency "activerecord", ">= 7.2"
 
-  spec.add_dependency "slack-notifier"
+  # Slack notifications are optional, so the gem no longer installs
+  # slack-notifier - an application that sets config.use_slack adds it itself.
+  # Declared in the Gemfile for the suite, the way sidekiq is.
 
   spec.add_development_dependency "bundler", "> 1.8"
   spec.add_development_dependency "rake", "> 10.0"

@@ -17,25 +17,6 @@ describe 'deprecations announced for 4.0' do
     expect(Patches.deprecator.deprecation_horizon).to eql('4.0')
   end
 
-  describe 'Slack notifications' do
-    # A fresh configuration each time: the notice fires once per instance, and
-    # other spec files set use_slack on the shared one, so without this the
-    # examples pass or fail depending on the random order.
-    before { Patches::Config.configuration = nil }
-    after { Patches::Config.configuration = nil }
-
-    it 'warns when they are enabled that slack-notifier becomes the host\'s' do
-      Patches::Config.configuration.use_slack = true
-      expect(@messages.join).to include('slack-notifier')
-      expect(@messages.join).to include("gem 'slack-notifier'")
-    end
-
-    it 'stays quiet when they are not enabled' do
-      Patches::Config.configuration.use_slack = false
-      expect(@messages).to be_empty
-    end
-  end
-
   describe 'when the notice runs' do
     # It used to fire at require time, during Bundler.require, which is before
     # config/initializers - so the documented silencing could never apply.

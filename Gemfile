@@ -28,6 +28,11 @@ gem 'sqlite3', version_requirement('SQLITE3_VERSION', '>= 1.4')
 concurrent_ruby = version_requirement('CONCURRENT_RUBY_VERSION')
 gem 'concurrent-ruby', concurrent_ruby if concurrent_ruby
 
+# Slack notifications are optional too. SLACK_NOTIFIER=none leaves the gem out,
+# which exercises the `defined?(Slack)` guard in Patches::Notifier.
+slack_notifier = version_requirement('SLACK_NOTIFIER', '')
+gem 'slack-notifier' unless slack_notifier == 'none'
+
 # Sidekiq is an optional integration, not a runtime dependency. SIDEKIQ_VERSION
 # =none leaves it out entirely so the `defined?(Sidekiq)` guards get exercised.
 # The library itself still supports older Sidekiq through
