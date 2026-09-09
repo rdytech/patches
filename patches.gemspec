@@ -30,15 +30,12 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  # Floors stay where they are: raising a minimum can block an install that works
-  # today, which is a major-version change. README.md records the range CI
-  # verifies, and 4.0 will raise these to match.
-  spec.add_dependency "railties", ">= 3.2"
+  # The floors 3.7.0 announced. Every combination CI verifies is at or above
+  # them; see the table in README.md.
+  spec.required_ruby_version = ">= 3.2"
 
-  # Declared at the same floor as railties so nothing currently installable is
-  # excluded. Patches::Patch subclasses ActiveRecord::Base and lib/patches/base.rb
-  # calls ActiveRecord::Base.connection, but only railties had been declared.
-  spec.add_dependency "activerecord", ">= 3.2"
+  spec.add_dependency "railties", ">= 7.2"
+  spec.add_dependency "activerecord", ">= 7.2"
 
   spec.add_dependency "slack-notifier"
 

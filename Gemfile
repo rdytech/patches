@@ -16,10 +16,8 @@ def version_requirement(name, default = nil)
   value.empty? ? default : value
 end
 
-# Unset, this resolves to the newest Rails the running Ruby allows. The gemspec
-# floor stays at railties >= 3.2; see Compatibility in README.md for the range
-# CI verifies.
-gem 'rails', version_requirement('RAILS_VERSION', '>= 7.1')
+# Unset, this resolves to the newest Rails the running Ruby allows.
+gem 'rails', version_requirement('RAILS_VERSION', '>= 7.2')
 
 # Rails pins its sqlite3 adapter: <= 7.0 needs `~> 1.4`, 7.1 accepts either,
 # 8.0+ needs `>= 2.1`. Unset, bundler picks the newest 2.x.

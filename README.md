@@ -56,25 +56,22 @@ deployment and the Capistrano task.
 
 ## Compatibility
 
-This release changes no version constraint: the gemspec still requires only
-`railties >= 3.2` and sets no Ruby floor, so anything that installed 3.6.2
-installs 3.6.3. The table is what CI verifies, which is narrower than what the
-gem permits - older Ruby and Rails are untested here, not blocked.
+| | Minimum |
+|---|---|
+| Ruby | 3.2 |
+| Rails | 7.2 |
 
-| | Rails 7.1 | Rails 7.2 | Rails 8.0 | Rails 8.1 |
-|---|---|---|---|---|
-| **Ruby 3.0** | ✅ | | | |
-| **Ruby 3.1** | ✅ | ✅ | | |
-| **Ruby 3.2** | ✅ | ✅ | ✅ | ✅ |
-| **Ruby 3.3** | ✅ | ✅ | ✅ | ✅ |
-| **Ruby 3.4** | | ✅ | ✅ | ✅ |
-| **Ruby 4.0** | | ✅ | ✅ | ✅ |
+Every combination the gemspec allows is verified on each push and pull request -
+the floors and the matrix are the same set, which they were not before 4.0:
 
-A blank cell is a pairing Rails itself does not support. Ruby 2.7 and Rails
-6.1/7.0 are deliberately not exercised - they are well past upstream support -
-though the gem still installs and, as of this release, passes on them.
+| | Rails 7.2 | Rails 8.0 | Rails 8.1 |
+|---|---|---|---|
+| **Ruby 3.2** | ✅ | ✅ | ✅ |
+| **Ruby 3.3** | ✅ | ✅ | ✅ |
+| **Ruby 3.4** | ✅ | ✅ | ✅ |
+| **Ruby 4.0** | ✅ | ✅ | ✅ |
 
-Ruby 4.0 is newer than all of these Rails releases, so those cells record that
+Ruby 4.0 is newer than all three Rails releases, so those cells record that
 Patches is verified on it, not that Rails claims support for it.
 
 ### Sidekiq
