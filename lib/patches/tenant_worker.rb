@@ -1,3 +1,4 @@
+require 'active_support/core_ext/hash/keys'
 require 'patches/sidekiq_job'
 
 class Patches::TenantWorker
@@ -8,7 +9,7 @@ class Patches::TenantWorker
   sidekiq_options Patches::Config.configuration.sidekiq_options
 
   def perform(tenant_name, path, params = {})
-    params = (params || {}).transform_keys(&:to_s)
+    params = (params || {}).stringify_keys
     if valid_application_version?(params['application_version'])
       run(tenant_name, path)
     else

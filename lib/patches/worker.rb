@@ -1,3 +1,4 @@
+require 'active_support/core_ext/hash/keys'
 require 'patches/sidekiq_job'
 
 class Patches::Worker
@@ -7,7 +8,7 @@ class Patches::Worker
   sidekiq_options Patches::Config.configuration.sidekiq_options
 
   def perform(runner, params = {})
-    params = (params || {}).transform_keys(&:to_s)
+    params = (params || {}).stringify_keys
     if valid_application_version?(params['application_version'])
       runner.constantize.new.perform
     else
