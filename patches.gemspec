@@ -21,7 +21,11 @@ Gem::Specification.new do |spec|
     "documentation_uri" => "#{spec.homepage}/blob/develop/docs/usage.md"
   }
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  # Only what a consumer needs: the library (including the generator templates,
+  # rake tasks and Capistrano integration), the install migration, and the
+  # documentation. Development files - Dockerfile, .devcontainer, .github, bin,
+  # Rakefile, RELEASING.md, specs - stay out of the package.
+  spec.files = `git ls-files -z lib db/migrate docs/usage.md README.md CHANGELOG.md LICENSE.md`.split("\x0")
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
