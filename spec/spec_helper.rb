@@ -11,12 +11,18 @@ end
 
 require 'bundler/setup'
 require 'rails/all'
-require 'database_cleaner'
 require 'active_model'
 require 'active_record'
 require 'patches'
 require 'pry'
 require 'webmock/rspec'
+
+# Sidekiq 7+ enables strict argument checking by default, and some consumers
+# turn it off. Job arguments must work either way, so CI runs both.
+if ENV['SIDEKIQ_STRICT_ARGS'] && !ENV['SIDEKIQ_STRICT_ARGS'].strip.empty?
+  require 'sidekiq'
+  Sidekiq.strict_args!(ENV['SIDEKIQ_STRICT_ARGS'] == 'false' ? false : :raise)
+end
 
 ActiveRecord::Base.establish_connection(adapter: 'sqlite3',
                                         database: 'test.db')

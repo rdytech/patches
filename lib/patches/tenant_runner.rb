@@ -13,8 +13,10 @@ class Patches::TenantRunner
       if parallel?
         Patches::TenantWorker.perform_async(
           tenant,
-          path,
-          application_version: Patches::Config.configuration.application_version
+          # Sidekiq 7+ rejects anything that is not a native JSON type, and a
+          # path is commonly a Pathname (Patches.default_path returns one).
+          path && path.to_s,
+          'application_version' => Patches::Config.configuration.application_version
         )
       else
         run(tenant, path)
