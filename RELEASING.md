@@ -12,7 +12,10 @@ versions listed on rubygems.org never carry the prefix.
 ## Cutting a release
 
 1. Bump `MAJOR` / `MINOR` / `PATCH` in `lib/patches/version.rb`.
-2. Add a new `## [X.Y.Z] - YYYY-MM-DD` entry to the top of `CHANGELOG.md` describing the changes.
+2. Replace `unreleased` in the `## [X.Y.Z] - unreleased` heading at the top of `CHANGELOG.md` with
+   today's date. A release branch carries `unreleased` while it waits for review, so the date is
+   always the day it ships - 3.7.0 shipped a week after its entry was drafted and claimed the
+   drafting date until someone noticed.
 3. Commit both changes and get them onto `develop` (PR + merge, as normal).
 4. From an up-to-date `develop`, tag the commit and push the tag:
 

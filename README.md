@@ -147,23 +147,23 @@ combination again, and delete `test.db` when switching between them: the suite
 creates `patches_patches` only when it is missing, so a database left by an
 earlier run can mask ordering problems.
 
-## Deprecations
+## Upgrading from 3.x
 
-3.7.0 introduces no breaking changes. It announces what 4.0 is expected to
-require, so the upgrade is uneventful. Each warning names its replacement and
-goes through the gem's own deprecator, which a host application can silence or
-redirect:
+Everything 4.0 removes was deprecated in 3.7.0, so upgrade to that first and
+clear its warnings - `Patches.deprecator.behavior = :raise` in an initializer
+turns them into failures if you would rather find them that way.
 
-```ruby
-Patches.deprecator.behavior = :silence  # or :raise, :log, a lambda...
-```
-
-| Deprecated | Replacement |
+| Change | What to do |
 |---|---|
-| Ruby older than 3.2, Rails older than 7.2 | Ruby 3.2+ and Rails 7.2+. 4.0 is expected to raise the gemspec floors to these, which are higher than the range CI verifies today |
+| Ruby 3.2 and Rails 7.2 are now the minimum | Upgrade, or stay on 3.7.x |
+| `slack-notifier` is no longer a dependency | Add `gem 'slack-notifier'` to your Gemfile if you set `config.use_slack` |
+| The Capistrano task is gone | Invoke `bundle exec rake patches:run` from your deployment process |
+| The workers include `Sidekiq::Job` | Use Sidekiq 6.3 or newer - 7.x or 8.x are the supported lines |
 
-Nothing is removed in this release, and the gemspec floors are unchanged, so
-anything that installed 3.6.x installs 3.7.0.
+Nothing else changed: patch classes, `Patches::Base`, the generator, the rake
+tasks, the configuration and the `patches_patches` table are all as they were.
+`Patches.deprecator` remains, so an initializer that configures it keeps
+working.
 
 ## Development
 

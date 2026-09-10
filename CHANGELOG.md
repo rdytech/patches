@@ -6,7 +6,48 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [3.7.0] - 2026-09-10
+## [4.0.0] - unreleased
+
+Removes everything 3.7.0 deprecated. Nothing here is a surprise if you upgraded
+to 3.7.0 and cleared its warnings; see Upgrading from 3.x in README.md.
+
+### Breaking
+- Ruby 3.2 and Rails 7.2 are the minimum, enforced by `required_ruby_version`
+  and `railties`/`activerecord >= 7.2`. Every combination CI verifies is now at
+  or above the floors, which was not true before
+- `slack-notifier` is no longer a runtime dependency. `Patches::Notifier`
+  requires it inside a `begin`/`rescue`, so the `defined?(Slack)` guard it always
+  carried finally does something. Applications that set `config.use_slack` add
+  `gem 'slack-notifier'` themselves
+- The Capistrano integration is removed - `require 'patches/capistrano'` and its
+  `patches:run` task. Invoke `bundle exec rake patches:run` from your deployment
+  process instead; `docs/usage.md` shows where
+- The workers include `Sidekiq::Job` directly, so Sidekiq 6.3 or newer is
+  required when the integration is used. `Patches.sidekiq_job_module` and its
+  `Sidekiq::Worker` fallback are gone
+- The install migration declares `ActiveRecord::Migration[7.2]` rather than
+  `[5.0]`. A fresh `patches_patches` therefore gets `datetime(6)` timestamp
+  columns, matching what a modern Rails schema uses, where `[5.0]`
+  compatibility produced `datetime` without precision. Existing installs are
+  untouched - they ran their own copy of the file long ago
+- Rails is required rather than guarded for. `railties` and `activerecord` were
+  always hard dependencies and the gem ships an engine, so the `defined?(Rails)`
+  checks described a mode nobody used - one of them read `defined?(:Rails)`,
+  always truthy, unnoticed until 3.6.3. `lib/patches.rb` now requires `rails`,
+  because loading the engine without it fails
+
+### Removed
+- The deprecation warnings 3.7.0 added, now that what they announced has
+  happened. `Patches.deprecator` itself stays - applications were told to
+  configure it - and its horizon points at the next major
+
+### Changed
+- CI covers every combination the gemspec allows, 12 cells rather than a wider
+  range, plus a leg for each optional-integration state: Sidekiq 7.x and 8.x
+  with strict arguments on and off, Sidekiq absent, `slack-notifier` absent, and
+  neither installed - the last of which nothing covered before
+
+## [3.7.0] - 2026-09-17
 
 Declares dependencies the gem always relied on, and announces what 4.0 is
 expected to require. No public API changes and no version constraint moves, so
