@@ -9,6 +9,7 @@ class Patches::TenantRunner
 
   def perform
     Patches.logger.info("Patches tenant runner for: #{tenants.join(',')}")
+    failures = []
     tenants.each do |tenant|
       if parallel?
         Patches::TenantWorker.perform_async(
@@ -19,9 +20,14 @@ class Patches::TenantRunner
           'application_version' => Patches::Config.configuration.application_version
         )
       else
-        run(tenant, path)
+        begin
+          run(tenant, path)
+        rescue TenantPatchUnsuccessfulError => e
+          failures << e
+        end
       end
     end
+    raise_failures(failures) if failures.any?
   end
 
   def tenants
@@ -32,5 +38,12 @@ class Patches::TenantRunner
 
   def parallel?
     Patches::Config.configuration.sidekiq_parallel
+  end
+
+  def raise_failures(failures)
+    message = 'Patching failed for one or more tenants: '
+    message += failures.map { |f| "#{f.tenant} (#{f.path}, #{f.exception.message})" }.join(', ')
+
+    raise(PatchesError, message)
   end
 end
