@@ -11,3 +11,4 @@
 /test.db
 /*.gem
 .byebug_history
+/vendor/

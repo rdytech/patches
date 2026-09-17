@@ -98,6 +98,10 @@ jobs:
       - name: Run specs
         run: bundle exec rspec
 
+      # lib/patches/version.rb is excluded from the coverage requirement, not
+      # from analysis: patches.gemspec requires it, so Bundler loads it under
+      # `bundle exec` before spec_helper starts SimpleCov, and its lines can
+      # never be recorded as covered.
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         with:
@@ -108,6 +112,7 @@ jobs:
             -Dsonar.inclusions=**/*.rb
             -Dsonar.tests=spec/
             -Dsonar.ruby.coverage.reportPaths=coverage/.resultset.json
+            -Dsonar.coverage.exclusions=lib/patches/version.rb
             -Dsonar.plugins.downloadOnlyRequired=true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

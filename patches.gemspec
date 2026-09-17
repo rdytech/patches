@@ -14,17 +14,32 @@ Gem::Specification.new do |spec|
   spec.description   = %q{A simple gem for one off tasks for example database patches}
   spec.homepage      = "https://github.com/rdytech/patches"
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.metadata = {
+    "source_code_uri"   => spec.homepage,
+    "changelog_uri"     => "#{spec.homepage}/blob/v#{Patches::VERSION}/CHANGELOG.md",
+    "bug_tracker_uri"   => "#{spec.homepage}/issues",
+    "documentation_uri" => "#{spec.homepage}/blob/v#{Patches::VERSION}/docs/usage.md"
+  }
+
+  # Only what a consumer needs: the library (including the generator templates,
+  # rake tasks and Capistrano integration), the install migration, and the
+  # documentation. Development files - Dockerfile, .devcontainer, .github, bin,
+  # Rakefile, RELEASING.md, specs - stay out of the package.
+  spec.files = `git ls-files -z lib db/migrate docs/usage.md README.md CHANGELOG.md LICENSE.md`.split("\x0")
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  # Runtime constraints are deliberately unchanged here: raising a minimum can
-  # block an install that works today, which is a major-version change.
-  # README.md records the range CI actually verifies. Declaring activerecord
-  # (Patches::Patch subclasses ActiveRecord::Base) and bounding slack-notifier
-  # are queued for the next minor.
+  # Floors stay where they are: raising a minimum can block an install that works
+  # today, which is a major-version change. README.md records the range CI
+  # verifies, and 4.0 will raise these to match.
   spec.add_dependency "railties", ">= 3.2"
+
+  # Declared at the same floor as railties so nothing currently installable is
+  # excluded. Patches::Patch subclasses ActiveRecord::Base and lib/patches/base.rb
+  # calls ActiveRecord::Base.connection, but only railties had been declared.
+  spec.add_dependency "activerecord", ">= 3.2"
+
   spec.add_dependency "slack-notifier"
 
   spec.add_development_dependency "bundler", "> 1.8"

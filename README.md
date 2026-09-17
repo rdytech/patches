@@ -1,19 +1,58 @@
 # Patches
 [![Run specs](https://github.com/rdytech/patches/actions/workflows/specs.yml/badge.svg)](https://github.com/rdytech/patches/actions/workflows/specs.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/39d142050017ffeb2564/maintainability)](https://codeclimate.com/repos/557f93b76956807f81000001/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/39d142050017ffeb2564/test_coverage)](https://codeclimate.com/repos/557f93b76956807f81000001/test_coverage)
 [![Gem Version](https://badge.fury.io/rb/patches.svg)](https://badge.fury.io/rb/patches)
 
 ![patches](docs/patches.jpg)
 
+A simple gem for one off tasks - the things that do not belong in a schema
+migration. Back-filling a column, correcting bad data, kicking off a one-time
+import: write it as a class, deploy it, and Patches runs it once and records
+that it ran.
 
-A simple gem for one off tasks
+## Installation
 
-## Version 2.0
+Add the gem to your application's Gemfile:
 
-Please note the breaking change release around deployment. See [docs/usage.md](docs/usage.md) for the full change.
+```ruby
+gem 'patches'
+```
 
-TL;DR You need to manually declare the patches task to run in your deploy.rb
+Then install the migration that records which patches have run:
+
+```
+bundle exec rake patches:install:migrations
+bundle exec rake db:migrate
+```
+
+## Usage
+
+Generate a patch:
+
+```
+bundle exec rails g patches:patch PreferenceUpdate
+```
+
+Fill in `run`:
+
+```ruby
+class PreferenceUpdate < Patches::Base
+  def run
+    User.where(preference: nil).update_all(preference: 'default')
+  end
+end
+```
+
+Run the pending ones - each patch runs once, and is recorded in
+`patches_patches`:
+
+```
+bundle exec rake patches:run
+```
+
+`rake patches:pending` lists what has not run yet. Patches can run inline or in
+the background via Sidekiq, across all tenants when you use Apartment, and
+report to Slack. See [docs/usage.md](docs/usage.md) for configuration, tenants,
+deployment and the Capistrano task.
 
 ## Compatibility
 
@@ -107,30 +146,58 @@ combination again, and delete `test.db` when switching between them: the suite
 creates `patches_patches` only when it is missing, so a database left by an
 earlier run can mask ordering problems.
 
-## Installation
+## Deprecations
 
-Add this line to your application's Gemfile:
+3.7.0 introduces no breaking changes. It announces what 4.0 is expected to
+require, so the upgrade is uneventful. Each warning names its replacement and
+goes through the gem's own deprecator, which a host application can silence or
+redirect:
 
 ```ruby
-gem 'patches'
+Patches.deprecator.behavior = :silence  # or :raise, :log, a lambda...
 ```
-And then execute:
 
-    $ bundle
+| Deprecated | Replacement |
+|---|---|
+| Relying on Patches to install `slack-notifier` | Add `gem 'slack-notifier'` to your Gemfile if you use `config.use_slack`. From 4.0 only applications that want it carry it |
+| `require 'patches/capistrano'` | Invoke `rake patches:run` from your deployment process. The Capistrano task is removed in 4.0 |
+| Sidekiq older than 6.3 | Any supported Sidekiq (7.x or 8.x). 4.0 is expected to include `Sidekiq::Job` directly instead of falling back to `Sidekiq::Worker` |
+| Ruby older than 3.2, Rails older than 7.2 | Ruby 3.2+ and Rails 7.2+. 4.0 is expected to raise the gemspec floors to these, which are higher than the range CI verifies today |
 
-Or install it yourself as:
-
-    $ gem install patches
-
-## Usage
-
-see [docs/usage.md](docs/usage.md)
+Nothing is removed in this release, and the gemspec floors are unchanged, so
+anything that installed 3.6.x installs 3.7.0.
 
 ## Development
 
+In VS Code or Codespaces, open the repository in the dev container - it reuses
+the `app` service from `docker-compose.yml`, so there is one definition of the
+environment rather than two. Otherwise, from a shell:
+
 ```
-docker-compose build
-docker-compose run app bundle exec rspec
+docker compose build
+docker compose run --rm app
+```
+
+The container's default command runs the specs. Any cell of the matrix above is
+reproducible in it: the Ruby version is a build argument, and the gem versions
+are passed through from your shell. The image is built with the default
+versions, so a non-default cell has to install them first:
+
+```
+docker compose build --build-arg RUBY_VERSION=3.1
+
+RAILS_VERSION="~> 7.1.0" docker compose run --rm app \
+  sh -c 'bundle install && bundle exec rspec'
+
+SIDEKIQ_VERSION=none docker compose run --rm app \
+  sh -c 'bundle install && bundle exec rspec --exclude-pattern "sidekiq/**/*_spec.rb"'
+```
+
+Or without Docker, if you have the Ruby you want on your path:
+
+```
+bundle install
+bundle exec rspec
 ```
 
 To install this gem onto your local machine, run `bundle exec rake install`.
@@ -146,4 +213,4 @@ Releases are published by GitHub Actions from a `vX.Y.Z` tag — see
 2. Create your feature branch (`git checkout -b feature/my-feature-name`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin feature/my-new-feature`)
-5. Create a new Pull Request
+5. Create a new Pull Request against `develop`

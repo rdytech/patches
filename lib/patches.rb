@@ -19,6 +19,7 @@ module Patches
   end
 end
 
+require "patches/deprecation"
 require "patches/base"
 require "patches/config"
 require "patches/tenant_run_concern"
