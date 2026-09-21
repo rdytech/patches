@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [4.0.0] - unreleased
+## [4.0.0] - 2026-09-21
 
 Removes everything 3.7.0 deprecated. Nothing here is a surprise if you upgraded
 to 3.7.0 and cleared its warnings; see Upgrading from 3.x in README.md.
