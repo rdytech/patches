@@ -1,4 +1,12 @@
-require 'slack-notifier'
+# Optional: an application that sets config.use_slack adds slack-notifier to its
+# own Gemfile. Patches runs without it, and send_slack_message's `defined?(Slack)`
+# guard - which could never be false while this require was unconditional - now
+# does its job.
+begin
+  require 'slack-notifier'
+rescue LoadError
+  nil
+end
 
 class Patches::Notifier
   class << self
@@ -28,7 +36,7 @@ class Patches::Notifier
     end
 
     def environment_prefix
-      Rails.env.upcase if defined?(Rails)
+      Rails.env.upcase
     end
 
     def notification_suffix

@@ -16,10 +16,8 @@ def version_requirement(name, default = nil)
   value.empty? ? default : value
 end
 
-# Unset, this resolves to the newest Rails the running Ruby allows. The gemspec
-# floor stays at railties >= 3.2; see Compatibility in README.md for the range
-# CI verifies.
-gem 'rails', version_requirement('RAILS_VERSION', '>= 7.1')
+# Unset, this resolves to the newest Rails the running Ruby allows.
+gem 'rails', version_requirement('RAILS_VERSION', '>= 7.2')
 
 # Rails pins its sqlite3 adapter: <= 7.0 needs `~> 1.4`, 7.1 accepts either,
 # 8.0+ needs `>= 2.1`. Unset, bundler picks the newest 2.x.
@@ -29,6 +27,11 @@ gem 'sqlite3', version_requirement('SQLITE3_VERSION', '>= 1.4')
 # ActiveSupport::LoggerThreadSafeLevel expects.
 concurrent_ruby = version_requirement('CONCURRENT_RUBY_VERSION')
 gem 'concurrent-ruby', concurrent_ruby if concurrent_ruby
+
+# Slack notifications are optional too. SLACK_NOTIFIER=none leaves the gem out,
+# which exercises the `defined?(Slack)` guard in Patches::Notifier.
+slack_notifier = version_requirement('SLACK_NOTIFIER', '')
+gem 'slack-notifier' unless slack_notifier == 'none'
 
 # Sidekiq is an optional integration, not a runtime dependency. SIDEKIQ_VERSION
 # =none leaves it out entirely so the `defined?(Sidekiq)` guards get exercised.

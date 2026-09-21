@@ -1,4 +1,4 @@
-class CreatePatch < ActiveRecord::Migration[5.0]
+class CreatePatch < ActiveRecord::Migration[7.2]
   def change
     create_table :patches_patches do |t|
       t.string :path, null: false

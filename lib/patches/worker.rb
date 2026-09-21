@@ -1,8 +1,8 @@
 require 'active_support/core_ext/hash/keys'
-require 'patches/sidekiq_job'
+require 'sidekiq'
 
 class Patches::Worker
-  include Patches.sidekiq_job_module
+  include Sidekiq::Job
   include Patches::ApplicationVersionValidation
 
   sidekiq_options Patches::Config.configuration.sidekiq_options

@@ -12,6 +12,15 @@ describe 'db/migrate/201506011700_create_patch.rb' do
     expect(File.read(migration_path)).to match(/ActiveRecord::Migration\[\d+\.\d+\]/)
   end
 
+  it 'declares a release no older than the gemspec floor' do
+    declared = File.read(migration_path)[/ActiveRecord::Migration\[(\d+\.\d+)\]/, 1]
+    floor = Gem::Specification.load(File.expand_path('../patches.gemspec', __dir__))
+                              .dependencies.find { |d| d.name == 'railties' }
+                              .requirement.requirements.first.last.to_s
+
+    expect(Gem::Version.new(declared)).to be >= Gem::Version.new(floor[/\d+\.\d+/])
+  end
+
   it 'loads on the installed Rails version' do
     load migration_path
     expect(CreatePatch.superclass).to be < ActiveRecord::Migration

@@ -56,25 +56,22 @@ deployment and the Capistrano task.
 
 ## Compatibility
 
-This release changes no version constraint: the gemspec still requires only
-`railties >= 3.2` and sets no Ruby floor, so anything that installed 3.6.2
-installs 3.6.3. The table is what CI verifies, which is narrower than what the
-gem permits - older Ruby and Rails are untested here, not blocked.
+| | Minimum |
+|---|---|
+| Ruby | 3.2 |
+| Rails | 7.2 |
 
-| | Rails 7.1 | Rails 7.2 | Rails 8.0 | Rails 8.1 |
-|---|---|---|---|---|
-| **Ruby 3.0** | ✅ | | | |
-| **Ruby 3.1** | ✅ | ✅ | | |
-| **Ruby 3.2** | ✅ | ✅ | ✅ | ✅ |
-| **Ruby 3.3** | ✅ | ✅ | ✅ | ✅ |
-| **Ruby 3.4** | | ✅ | ✅ | ✅ |
-| **Ruby 4.0** | | ✅ | ✅ | ✅ |
+Every combination the gemspec allows is verified on each push and pull request -
+the floors and the matrix are the same set, which they were not before 4.0:
 
-A blank cell is a pairing Rails itself does not support. Ruby 2.7 and Rails
-6.1/7.0 are deliberately not exercised - they are well past upstream support -
-though the gem still installs and, as of this release, passes on them.
+| | Rails 7.2 | Rails 8.0 | Rails 8.1 |
+|---|---|---|---|
+| **Ruby 3.2** | ✅ | ✅ | ✅ |
+| **Ruby 3.3** | ✅ | ✅ | ✅ |
+| **Ruby 3.4** | ✅ | ✅ | ✅ |
+| **Ruby 4.0** | ✅ | ✅ | ✅ |
 
-Ruby 4.0 is newer than all of these Rails releases, so those cells record that
+Ruby 4.0 is newer than all three Rails releases, so those cells record that
 Patches is verified on it, not that Rails claims support for it.
 
 ### Sidekiq
@@ -83,17 +80,21 @@ Sidekiq is an **optional** integration, not a runtime dependency: Patches runs
 each patch inline when Sidekiq is absent. Set `config.use_sidekiq = true` to run
 them in the background - see [docs/usage.md](docs/usage.md).
 
-The workers resolve their mixin at load time via `Patches.sidekiq_job_module`,
-preferring `Sidekiq::Job` (the name Sidekiq has used since 6.3) and falling back
-to `Sidekiq::Worker`, so older Sidekiq keeps working. CI covers each state a
-consumer can be in:
+The workers include `Sidekiq::Job`, so Sidekiq 6.3 or newer is required when the
+integration is used - 6.2 and earlier predate that constant. CI covers each
+state a consumer can be in:
 
 | State | Covered by |
 |---|---|
 | Sidekiq not installed | A leg omitting the gem entirely, exercising the `defined?(Sidekiq)` guards |
 | Installed, strict arguments on | Sidekiq 7.x and 8.x at their default (`:raise`) |
 | Installed, strict arguments off | Sidekiq 7.x and 8.x with `Sidekiq.strict_args!(false)` |
-| Older Sidekiq | A 6.5 leg, plus a spec covering the `Sidekiq::Worker` fallback |
+
+### Slack
+
+Slack notifications are optional and Patches does not install
+`slack-notifier` - add `gem 'slack-notifier'` to your own Gemfile if you set
+`config.use_slack`. CI runs a leg without it to keep that path honest.
 
 ### Running one combination locally
 
@@ -146,26 +147,23 @@ combination again, and delete `test.db` when switching between them: the suite
 creates `patches_patches` only when it is missing, so a database left by an
 earlier run can mask ordering problems.
 
-## Deprecations
+## Upgrading from 3.x
 
-3.7.0 introduces no breaking changes. It announces what 4.0 is expected to
-require, so the upgrade is uneventful. Each warning names its replacement and
-goes through the gem's own deprecator, which a host application can silence or
-redirect:
+Everything 4.0 removes was deprecated in 3.7.0, so upgrade to that first and
+clear its warnings - `Patches.deprecator.behavior = :raise` in an initializer
+turns them into failures if you would rather find them that way.
 
-```ruby
-Patches.deprecator.behavior = :silence  # or :raise, :log, a lambda...
-```
-
-| Deprecated | Replacement |
+| Change | What to do |
 |---|---|
-| Relying on Patches to install `slack-notifier` | Add `gem 'slack-notifier'` to your Gemfile if you use `config.use_slack`. From 4.0 only applications that want it carry it |
-| `require 'patches/capistrano'` | Invoke `rake patches:run` from your deployment process. The Capistrano task is removed in 4.0 |
-| Sidekiq older than 6.3 | Any supported Sidekiq (7.x or 8.x). 4.0 is expected to include `Sidekiq::Job` directly instead of falling back to `Sidekiq::Worker` |
-| Ruby older than 3.2, Rails older than 7.2 | Ruby 3.2+ and Rails 7.2+. 4.0 is expected to raise the gemspec floors to these, which are higher than the range CI verifies today |
+| Ruby 3.2 and Rails 7.2 are now the minimum | Upgrade, or stay on 3.7.x |
+| `slack-notifier` is no longer a dependency | Add `gem 'slack-notifier'` to your Gemfile if you set `config.use_slack` |
+| The Capistrano task is gone | Invoke `bundle exec rake patches:run` from your deployment process |
+| The workers include `Sidekiq::Job` | Use Sidekiq 6.3 or newer - 7.x or 8.x are the supported lines |
 
-Nothing is removed in this release, and the gemspec floors are unchanged, so
-anything that installed 3.6.x installs 3.7.0.
+Nothing else changed: patch classes, `Patches::Base`, the generator, the rake
+tasks, the configuration and the `patches_patches` table are all as they were.
+`Patches.deprecator` remains, so an initializer that configures it keeps
+working.
 
 ## Development
 
